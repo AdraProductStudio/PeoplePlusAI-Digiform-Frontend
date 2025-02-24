@@ -9,10 +9,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import axiosInstance from '../../services/axiosInstance'
 import { toast } from 'react-toastify'
 import Cookies from 'js-cookie'
-import bcrypt from 'bcryptjs';
 import sha256 from 'sha256';
 import CustomSpinner from '../../reusable-components/CustomSpinner'
-
 
 
 
@@ -150,6 +148,13 @@ const Login = () => {
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault(); // Prevent accidental form submission if inside a form
+      handleLogin(); // Call your signup function
+    }
+  };
+
 
   const handleDigiLockerRequest = async (accessToken) => {
     try {
@@ -177,8 +182,8 @@ const Login = () => {
       <Header />
       <Container className='main-section' fluid >
         <Container className='d-flex flex-column justify-content-center align-items-center h-100' >
-          <Row className="bg-white p-lg-5 p-sm-5  rounded-3 col-12 col-md-8 col-lg-6 col-xl-5 " >
-            <Col className='my-5'>
+          <Row className="bg-white px-3 px-md-5 py-3  rounded-3 col-12 col-md-8 col-lg-6 col-xl-5 " >
+            <Col className='my-5 '>
               <h3 className='mb-5 text-center'>Digiform Login</h3>
               <div className="mb-3">
                 <CustomInput
@@ -211,7 +216,8 @@ const Login = () => {
                   onChange={handleLoginInputs}
                   value={loginInputs.password || ""}
                   className="mb-2"
-                  onBlur={() => handleBlur("password")}
+                  onBlur={() => handleBlur("password")}                 
+                  onKeyDown={handleKeyDown}
                 />
                 {
                   error.passwordError &&

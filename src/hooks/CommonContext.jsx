@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 
 const CommonContext = createContext();
 
-export const DataProvider = ({ children }) => {
+export const    DataProvider = ({ children }) => {
 
     const [extractedJSONFields, setExtractedJSONFields] = useState([
         {

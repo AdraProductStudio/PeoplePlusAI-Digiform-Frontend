@@ -178,3 +178,11 @@ input[type=number] {
   border: 1px solid #ccc !important; 
   background-color: white !important;
 }
+
+@media (max-width:576px) {
+  .btn.generate-new-pdf-button,
+  .call-now-button
+   {
+    width: 100% !important;
+  }
+}

@@ -23,7 +23,7 @@ const MultistepForm = () => {
     const [loadingAction, setLoadingAction] = useState(null);
     const [generateNewPdfEnabled, setGenerateNewPdfEnabled] = useState(false)
     const [pageLoadingModal, setPageLoadingModal] = useState(false)
-    const [step, setStep] = useState(1);
+    const [step, setStep] = useState(3);
     const [dialCode, setDialCode] = useState("")
     const [countryCode, setCountryCode] = useState(null)
     const [mobileNumber, setMobileNumber] = useState({
@@ -195,7 +195,7 @@ const MultistepForm = () => {
         <Container className='main-section' fluid>
             <Container className='p-5 h-100'>
                 <Row className='card h-100 rounded-5 border-0 flex-column'>
-                    <div className="progress-container  mt-5 px-5 w-75 mx-auto">
+                    <div className="progress-container mt-5 px-5 mx-auto col-sm-12 col-lg-9">
                         <div className="progress-step">
                             <div className={`circle ${step >= 1 ? "active" : ""} cup`} onClick={() => setStep(1)}>1</div>
                             <div className={`line ${step >= 2 ? "filled " : ""} `}></div>
@@ -230,13 +230,13 @@ const MultistepForm = () => {
                     {
                         step === 2 &&
                         <Col className="overflow-scroll w-100 col  ">
-                            <div className='px-5 my-5  mx-auto d-block '>
+                            <div className='px-lg-5 px-3 my-5 mx-auto d-block '>
                                 <div>
                                     <p htmlFor="field1" className="form-label mb-3 text-grey">There are a few additional questions that need to be answered to complete your application.<br /> Please enter your phone number so we can call you to get that information.</p>
                                     <div>
                                         <div className="container-fluid mt-4 mx-auto">
                                             <div className="row mb-2">
-                                                <div className="mb-4  w-lg-25  mt-3">
+                                                <div className="mb-4 mt-3 col-sm-12 col-lg-5">
                                                     <PhoneInput
                                                         id="floatingInput"
                                                         specialLabel="Mobile Number"
@@ -260,12 +260,12 @@ const MultistepForm = () => {
                                                 <div>
                                                     <CustomButton
                                                         buttonName={loading && loadingAction === "CallNow" ? <CustomSpinner variant="light" size="sm" /> : "Call now"}
-                                                        className={`btn btn-success d-block cup call-now-button  ${loading && 'pe-none opacity-50'}`}
+                                                        className={`btn btn-success d-block cup call-now-button col-sm-12 col-md-3 col-lg-2 ${loading && 'pe-none opacity-50'}`}
                                                         onClick={handleCallNow}
                                                     />
                                                     <CustomButton
                                                         buttonName={loading && loadingAction === "GenerateNewPDF" ? <CustomSpinner variant="light" size="sm" /> : "Generate new PDF"}
-                                                        className={`btn mt-4 cup generate-new-pdf-button  py-2 ${loading || !generateNewPdfEnabled && 'pe-none opacity-50'}`}
+                                                        className={`btn mt-4 cup generate-new-pdf-button  py-2 col-sm-12 col-md-4 col-lg-2  ${loading || !generateNewPdfEnabled && 'pe-none opacity-50'}`}
                                                         onClick={handleGenerateNewPDF}
                                                     />
                                                 </div>
@@ -280,7 +280,7 @@ const MultistepForm = () => {
                         step === 3 &&
                         <div className={`step step-3 px-5`}>
                             <p htmlFor="field1" className="form-label text-grey mt-5">Please click on preview to review and download the form. Thank you for using Digiform!</p>
-                            <div className=''>
+                            <div className='mt-4'>
                                 <button type="button" className="btn btn-success " onClick={() => handleFinish()}>Finish</button>
                             </div>
                         </div>

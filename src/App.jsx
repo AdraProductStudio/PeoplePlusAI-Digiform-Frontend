@@ -7,12 +7,14 @@ import UpdateInformation from './views/pages/UpdateInformation'
 import ProtectedRoute from './views/routes/ProtectedRoute'
 import { ToastContainer } from "react-toastify";
 
+const basename = import.meta.env.MODE === "development" ? "/" : `/${import.meta.env.VITE_PUBLIC_URL}`;
+
 
 function App() {
 
   return (
     <>
-      <BrowserRouter>
+      <BrowserRouter basename={basename}>
         <ToastContainer theme='light' />
 
         <Routes>

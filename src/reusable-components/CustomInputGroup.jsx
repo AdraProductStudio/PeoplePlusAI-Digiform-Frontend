@@ -31,7 +31,8 @@ const CustomInputGroup = ({
     showPassword,
     type,
     onBlur,
-    onChange
+    onChange,
+    onKeyDown
 
 }) => {
 
@@ -47,7 +48,7 @@ const CustomInputGroup = ({
                     value={value}
                     name={name}
                     onChange={onChange}
-                    onKeyDown={keyDown}
+                    onKeyDown={onKeyDown}
                     id={id}
                     accept={inputAccept}
                     hidden={inputHidden}

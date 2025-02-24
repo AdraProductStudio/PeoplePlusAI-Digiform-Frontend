@@ -6,10 +6,8 @@ import CustomInput from '../../reusable-components/CustomInput'
 import CustomButton from '../../reusable-components/CustomButton'
 import CustomInputGroup from '../../reusable-components/CustomInputGroup'
 import { Link, useNavigate } from 'react-router-dom'
-import axios from 'axios'
 import axiosInstance from '../../services/axiosInstance'
 import { useDispatch, useSelector } from 'react-redux'
-import bcrypt from 'bcryptjs';
 import sha256 from 'sha256';
 
 
@@ -19,8 +17,6 @@ import sha256 from 'sha256';
 const Signup = () => {
 
   const navigate = useNavigate()
-  const { username, password, confirmPassword } = useSelector((state) => state.commonState)
-  const dispatch = useDispatch()
 
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
@@ -70,6 +66,15 @@ const Signup = () => {
       ));
     }
   }
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault(); // Prevent accidental form submission if inside a form
+      handleSignup(); // Call your signup function
+    }
+  };
+
+  
 
   const validatePassword = (password) => {
     const minLengthCheck = password.length >= 8;
@@ -207,8 +212,8 @@ const Signup = () => {
       <Header />
       <Container className='main-section' fluid >
         <Container className='d-flex flex-column justify-content-center align-items-center h-100' >
-          <Row className="bg-white p-5 rounded-3 col-12 col-md-8 col-lg-6 col-xl-5 " >
-            <Col className='my-5'>
+          <Row className="bg-white px-3 px-md-5 py-3  rounded-3 col-12 col-md-8 col-lg-6 col-xl-5 " >
+            <Col className='my-5 '>
               <h3 className='mb-5 text-center'>Digiform Signup</h3>
               <div className="mb-3">
                 <CustomInput
@@ -260,6 +265,7 @@ const Signup = () => {
                   value={signupInputs?.confirmPassword || ""}
                   className="mb-2"
                   onBlur={() => handleBlur("confirmPassword")}
+                  onKeyDown={handleKeyDown}
                 />
                 {
                   error.confirmPasswordError &&
