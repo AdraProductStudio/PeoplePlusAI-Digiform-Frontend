@@ -21,7 +21,6 @@ const Login = () => {
 
   const [loading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [loginInputs, setLoginInputs] = useState({})
   const [errorMessage, setErrorMessage] = useState({
     usernameErrorMessage: "",
@@ -56,7 +55,6 @@ const Login = () => {
       { ...prevState, [name]: value }
     ))
 
-    // Remove error messages dynamically when user starts typing
     if (value.trim() !== "") {
       setError((prevState) => (
         { ...prevState, [`${name}Error`]: false }
@@ -125,22 +123,21 @@ const Login = () => {
       const password = sha256(loginInputs?.password?.trim());
 
       const basicAuth = "Basic " + btoa(`${username}:${password}`);
-
-
       const response = await axiosInstance.get('/login', {
         headers: {
           Authorization: basicAuth,
         },
       });
 
-
       if (response.data.error_code === 200) {
         Cookies.set("accessToken", response.data.data.access_token)
         Cookies.set("refreshToken", response.data.data.refresh_token)
         await handleDigiLockerRequest(response.data.data.access_token)
+        toast.success(response.data.message);
+
       } else {
         setLoading(false)
-        toast.error("Login failed:", response.data);
+        toast.error(response.data.message);
       }
     } catch (error) {
       setLoading(false)
@@ -166,7 +163,6 @@ const Login = () => {
       if (response.data.error_code === 200) {
         Cookies.set("digiLockerURL", response.data.data.url)
         Cookies.set("digiLockerAccessId", response.data.data.id)
-        toast.success(response.data.message);
         setLoading(false)
         navigate("/home");
       } else {

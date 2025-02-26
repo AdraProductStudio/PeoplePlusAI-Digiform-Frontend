@@ -2,9 +2,8 @@ import axios from "axios";
 import Cookies from "js-cookie"; // Ensure js-cookie is installed
 
 const axiosInstance = axios.create({
-    baseURL: `http://192.168.29.41:8080`,
-
-
+    baseURL: `http://10.10.11.29:5000`,
+    // baseURL: `https://digiformapi.adraproductstudio.com:5000`,
     headers: {
         "Content-Type": "application/json",
     },
@@ -34,15 +33,14 @@ axiosInstance.interceptors.response.use(
             originalRequest._retry = true;
             const refreshToken = Cookies.get("refreshToken");
             if (!refreshToken) {
-                console.log("!refreshToken")
-                console.error("No refresh token available. Logging out...");
                 Cookies.remove("accessToken");
                 Cookies.remove("refreshToken");
                 return Promise.reject(error);
             }
 
             try {
-                const response = await axios.get("http://192.168.29.41:8080/refresh", {
+                const response = await axios.get("http://10.10.11.29:5000/refresh", {
+                // const response = await axios.get("https://digiformapi.adraproductstudio.com:5000/refresh", {
                     headers: {
                         Authorization: `Bearer ${refreshToken}`
                     },

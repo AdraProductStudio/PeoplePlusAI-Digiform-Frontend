@@ -23,7 +23,7 @@ const MultistepForm = () => {
     const [loadingAction, setLoadingAction] = useState(null);
     const [generateNewPdfEnabled, setGenerateNewPdfEnabled] = useState(false)
     const [pageLoadingModal, setPageLoadingModal] = useState(false)
-    const [step, setStep] = useState(3);
+    const [step, setStep] = useState(1);
     const [dialCode, setDialCode] = useState("")
     const [countryCode, setCountryCode] = useState(null)
     const [mobileNumber, setMobileNumber] = useState({
@@ -71,7 +71,6 @@ const MultistepForm = () => {
             }
             else if (response.data.error_code === 400) {
                 setTimeout(() => {
-                    console.log("⏳ Retrying API call 400...");
                     setIsPdfLoaded(!isPdfLoaded)
                 }, 5000);
             }
@@ -108,35 +107,23 @@ const MultistepForm = () => {
         if (window.confirm(`Are you sure you want to call +${mobileNumber.countryCode}${mobileNumber.mobileNumber}?`)) {
             // window.location.href = `tel:+${mobileNumber.countryCode}${mobileNumber.mobileNumber}`;
             try {
-
-
-
                 setLoading(true)
                 setLoadingAction("CallNow")
                 const payload = {
                     "file_blob": fetchedPdfBlobFile,
                     "phone_number": `+${countryCode}${mobileNumber.mobileNumber}`
                 }
-                console.log("payload", payload)
-
-
                 const response = await axiosInstance.post("/initiate_outbound_call", payload)
-                console.log(response.data)
                 if (response.data.error_code === 200) {
                     setLoading(false)
-                    console.log("response.data.error_code === 200")
                     toast.success(response.data.message)
                     setGenerateNewPdfEnabled(true)
                 } else {
                     setLoading(false)
-
-                    console.log("else part")
                     toast.error(response.data.error_code)
                 }
-
             } catch (error) {
                 setLoading(false)
-
                 toast.error(response.data.error_code)
                 console.log(error)
             }
@@ -156,15 +143,10 @@ const MultistepForm = () => {
                 "file_blob": fetchedPdfBlobFile,
                 "phone_number": `+${countryCode}${mobileNumber.mobileNumber}`
             }
-            console.log("payload", payload)
-
 
             const response = await axiosInstance.post("/get_filled_form", payload)
-            console.log(response.data)
             if (response.data.error_code === 200) {
                 setLoading(false)
-
-                console.log("200 response.data.message", response.data.message);
                 setStep(1)
                 setStep3Enabled(true)
                 // ✅ Convert Base64 to Blob URL
@@ -221,9 +203,7 @@ const MultistepForm = () => {
                                         style={{ width: "60%", height: "100%", border: "none" }}
                                     />
                                     :
-                                    <div className='d-flex justify-content-center align-items-center '>
-                                        <h5>Loading PDF...</h5>
-                                    </div>
+                                    null
                             }
                         </Col>
                     }
