@@ -98,6 +98,8 @@ const Login = () => {
   }
 
   const handleLogin = async () => {
+
+    console.log("login")
     let hasError = false;
 
     // ✅ Input validation
@@ -136,6 +138,8 @@ const Login = () => {
         Cookies.set("refreshToken", response.data.data.refresh_token)
         await handleDigiLockerRequest(response.data.data.access_token)
         toast.success(response.data.message);
+
+
 
       } else {
         setLoading(false)

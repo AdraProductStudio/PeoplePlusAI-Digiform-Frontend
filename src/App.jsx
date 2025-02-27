@@ -14,7 +14,7 @@ function App() {
 
   return (
     <>
-      <BrowserRouter basename={basename}>
+      <BrowserRouter>
         <ToastContainer theme='light' />
 
         <Routes>
