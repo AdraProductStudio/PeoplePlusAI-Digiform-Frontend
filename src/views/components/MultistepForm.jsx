@@ -111,10 +111,14 @@ const MultistepForm = () => {
                 setLoadingAction("CallNow")
                 const payload = {
                     "file_blob": fetchedPdfBlobFile,
-                    "phone_number": `+${countryCode}${mobileNumber.mobileNumber}`
+                    "phone_number": `+${countryCode}${mobileNumber.mobileNumber}`,
+
                 }
                 const response = await axiosInstance.post("/initiate_outbound_call", payload)
+
                 if (response.data.error_code === 200) {
+                    Cookies.set("conversationId", response.data.data.conversation_id)
+                    Cookies.set("serviceId", response.data.data.service_id)
                     setLoading(false)
                     toast.success(response.data.message)
                     setGenerateNewPdfEnabled(true)
@@ -141,7 +145,8 @@ const MultistepForm = () => {
 
             const payload = {
                 "file_blob": fetchedPdfBlobFile,
-                "phone_number": `+${countryCode}${mobileNumber.mobileNumber}`
+                "conversation_id": Cookies.get("conversationId"),
+                "service_id": Cookies.get("serviceId")
             }
 
             const response = await axiosInstance.post("/get_filled_form", payload)

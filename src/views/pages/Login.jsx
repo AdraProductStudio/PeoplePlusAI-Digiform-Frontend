@@ -36,6 +36,8 @@ const Login = () => {
     Cookies.remove("refreshToken")
     Cookies.remove("digiLockerURL")
     Cookies.remove("digiLockerAccessId")
+    Cookies.remove("conversationId")
+    Cookies.remove("serviceId")
   }, [])
 
   const handleShowPassword = (name) => {
@@ -212,7 +214,7 @@ const Login = () => {
                   onChange={handleLoginInputs}
                   value={loginInputs.password || ""}
                   className="mb-2"
-                  onBlur={() => handleBlur("password")}                 
+                  onBlur={() => handleBlur("password")}
                   onKeyDown={handleKeyDown}
                 />
                 {

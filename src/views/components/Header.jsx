@@ -17,6 +17,8 @@ const Header = ({ currentPage }) => {
         Cookies.remove("refreshToken")
         Cookies.remove("digiLockerURL")
         Cookies.remove("digiLockerAccessId")
+        Cookies.remove("conversationId")
+        Cookies.remove("serviceId")
         navigate("/");
     }
 
