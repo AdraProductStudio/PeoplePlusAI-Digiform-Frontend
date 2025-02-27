@@ -218,6 +218,7 @@ const MultistepForm = () => {
                             <div className='px-lg-5 px-3 my-5 mx-auto d-block '>
                                 <div>
                                     <p htmlFor="field1" className="form-label mb-3 text-grey">There are a few additional questions that need to be answered to complete your application.<br /> Please enter your phone number so we can call you to get that information.</p>
+                                    <p htmlFor="field1" className="form-label mb-3 text-grey fst-italic">(Once the call is complete, please regenerate the PDF to include the updated details)</p>
                                     <div>
                                         <div className="container-fluid mt-4 mx-auto">
                                             <div className="row mb-2">
@@ -264,7 +265,7 @@ const MultistepForm = () => {
                     {
                         step === 3 &&
                         <div className={`step step-3 px-5`}>
-                            <p htmlFor="field1" className="form-label text-grey mt-5">Please click on preview to review and download the form. Thank you for using Digiform!</p>
+                            <p htmlFor="field1" className="form-label text-grey mt-5">Thank you for using Digiform!</p>
                             <div className='mt-4'>
                                 <button type="button" className="btn btn-success " onClick={() => handleFinish()}>Finish</button>
                             </div>
