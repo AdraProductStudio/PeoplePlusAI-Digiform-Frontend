@@ -105,7 +105,6 @@ const MultistepForm = () => {
         }
 
         if (window.confirm(`Are you sure you want to call +${mobileNumber.countryCode}${mobileNumber.mobileNumber}?`)) {
-            // window.location.href = `tel:+${mobileNumber.countryCode}${mobileNumber.mobileNumber}`;
             try {
                 setLoading(true)
                 setLoadingAction("CallNow")
@@ -154,7 +153,6 @@ const MultistepForm = () => {
                 setLoading(false)
                 setStep(1)
                 setStep3Enabled(true)
-                // ✅ Convert Base64 to Blob URL
                 const base64ToBlobUrl = (pdfBlob1) => {
                     const base64WithoutPrefix = pdfBlob1.split(",")[1];
                     const byteCharacters = atob(base64WithoutPrefix);
@@ -163,11 +161,13 @@ const MultistepForm = () => {
                     return URL.createObjectURL(blob);
                 };
 
-                // ✅ Convert and Set PDF URL
                 const newPdfBlobUrl = base64ToBlobUrl(response.data.data.file_blob);
                 setFetchedPdfBlobFile(response.data.data.file_blob.split(",")[1])
                 setNewPdfUrl(newPdfBlobUrl);
                 toast.success(response.data.message)
+            } else if (response.data.error_code === 1) {
+                toast.info(response.data.message)
+                setLoading(false)
             } else {
                 setLoading(false)
                 toast.error(response.data.error_code)
@@ -239,7 +239,7 @@ const MultistepForm = () => {
                                                             type: "tel",
                                                             placeholder: "Mobile Number",
                                                             required: true,
-                                                            style: { borderColor: "grey", backgroundColor: "white" },  // Inline style to override red border
+                                                            style: { borderColor: "grey", backgroundColor: "white" },  
                                                         }}
                                                     />
                                                 </div>
