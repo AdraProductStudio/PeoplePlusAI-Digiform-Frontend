@@ -77,8 +77,8 @@ export const HomeCards = () => {
                                 <Card.Body>
                                     <Card.Title className='card-title'>{item.cardTitle}</Card.Title>
                                     <div onClick={() => {
-                                        window.open(Cookies.get("digiLockerURL"), "_blank");
-                                        handleUse()
+                                        window.open(Cookies.get("digiLockerURL"), "_self");
+                                        // handleUse()
                                     }}>
                                         <CustomButton
                                             buttonName={loading ? <CustomSpinner variant="light" size="sm" /> : item.cardButtonText}

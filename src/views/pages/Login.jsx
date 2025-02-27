@@ -31,14 +31,6 @@ const Login = () => {
     passwordError: false,
   })
 
-  useEffect(() => {
-    Cookies.remove("accessToken")
-    Cookies.remove("refreshToken")
-    Cookies.remove("digiLockerURL")
-    Cookies.remove("digiLockerAccessId")
-    Cookies.remove("conversationId")
-    Cookies.remove("serviceId")
-  }, [])
 
   const handleShowPassword = (name) => {
     switch (name) {
