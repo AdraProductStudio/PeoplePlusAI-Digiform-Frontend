@@ -214,7 +214,7 @@ const Signup = () => {
         <Container className='d-flex flex-column justify-content-center align-items-center h-100' >
           <Row className="bg-white px-3 px-md-5 py-3  rounded-3 col-12 col-md-8 col-lg-6 col-xl-5 " >
             <Col className='my-5 '>
-              <h3 className='mb-5 text-center'>Digiform Signup</h3>
+              <h3 className='mb-5 text-center digiform-text'>DigiForm</h3>
               <div className="mb-3">
                 <CustomInput
                   inputLabel="Username"
@@ -274,7 +274,7 @@ const Signup = () => {
               </div>
               <CustomButton
                 buttonName="Signup"
-                className="btn btn-primary mt-5 mx-auto d-block w-100"
+                className="btn custom-button-sm mt-5 mx-auto d-block w-100 py-2"
                 onClick={handleSignup}
               />
               <p className='mt-3 text-center'>

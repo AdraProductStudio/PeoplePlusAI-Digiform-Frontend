@@ -2,7 +2,7 @@ import React from 'react'
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import CustomButton from '../../reusable-components/CustomButton';
-import Image from '../../utils/images';
+import Image from '../../utils/images'
 import Cookies from 'js-cookie'
 import { useNavigate } from 'react-router-dom';
 
@@ -13,12 +13,12 @@ const Header = ({ currentPage }) => {
     const navigate = useNavigate()
 
     const handleLogout = () => {
-        Cookies.remove("accessToken")
-        Cookies.remove("refreshToken")
-        Cookies.remove("digiLockerURL")
-        Cookies.remove("digiLockerAccessId")
-        Cookies.remove("conversationId")
-        Cookies.remove("serviceId")
+        sessionStorage.removeItem("accessToken")
+        sessionStorage.removeItem("refreshToken")
+        sessionStorage.removeItem("digiLockerURL")
+        sessionStorage.removeItem("digiLockerAccessId")
+        sessionStorage.removeItem("conversationId")
+        sessionStorage.removeItem("serviceId")
         navigate("/");
     }
 
@@ -26,7 +26,7 @@ const Header = ({ currentPage }) => {
         <Navbar className="header-section" >
             <Container>
                 <Navbar.Brand href="https://adraproductstudio.com/" target='_blank'>
-                    <img src={Image.adraLogo} alt="adra-logo" width={60} />
+                    <img src={Image.companyLogo} alt="adra-logo" width={140} />
                 </Navbar.Brand>
                 <Navbar.Toggle />
                 {

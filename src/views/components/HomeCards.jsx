@@ -77,7 +77,8 @@ export const HomeCards = () => {
                                 <Card.Body>
                                     <Card.Title className='card-title'>{item.cardTitle}</Card.Title>
                                     <div onClick={() => {
-                                        window.open(Cookies.get("digiLockerURL"), "_self");
+                                        window.open(sessionStorage.getItem("digiLockerURL"), "_self");
+                                        
                                         // handleUse()
                                     }}>
                                         <CustomButton

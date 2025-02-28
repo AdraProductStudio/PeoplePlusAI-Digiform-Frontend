@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Col, Container, Row } from 'react-bootstrap'
+import {Form, Col, Container, Row } from 'react-bootstrap'
 import Cookies from 'js-cookie';
 import CommonContext from '../../hooks/CommonContext';
 import CustomButton from '../../reusable-components/CustomButton';
@@ -33,6 +33,7 @@ const MultistepForm = () => {
     const [step2Enabled, setStep2Enabled] = useState(false)
     const [step3Enabled, setStep3Enabled] = useState(false)
     const [isPdfLoaded, setIsPdfLoaded] = useState(true)
+    const [language,setLanguage] = useState("")
 
 
     useEffect(() => {
@@ -44,12 +45,12 @@ const MultistepForm = () => {
             setPageLoadingModal(true);
 
             const payload = {
-                request_id: Cookies.get("digiLockerAccessId"),
+                request_id: sessionStorage.getItem("digiLockerAccessId"),
                 filename: "SBI.pdf"
             };
             const response = await axiosInstance.post("/filled_form", payload, {
                 headers: {
-                    Authorization: `Bearer ${Cookies.get("accessToken")}`
+                    Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`
                 }
             });
 
@@ -111,13 +112,14 @@ const MultistepForm = () => {
                 const payload = {
                     "file_blob": fetchedPdfBlobFile,
                     "phone_number": `+${countryCode}${mobileNumber.mobileNumber}`,
+                    "language" : language
 
                 }
                 const response = await axiosInstance.post("/initiate_outbound_call", payload)
 
                 if (response.data.error_code === 200) {
-                    Cookies.set("conversationId", response.data.data.conversation_id)
-                    Cookies.set("serviceId", response.data.data.service_id)
+                    sessionStorage.setItem("conversationId", response.data.data.conversation_id)
+                    sessionStorage.setItem("serviceId", response.data.data.service_id)
                     setLoading(false)
                     toast.success(response.data.message)
                     setGenerateNewPdfEnabled(true)
@@ -144,8 +146,8 @@ const MultistepForm = () => {
 
             const payload = {
                 "file_blob": fetchedPdfBlobFile,
-                "conversation_id": Cookies.get("conversationId"),
-                "service_id": Cookies.get("serviceId")
+                "conversation_id": sessionStorage.getItem("conversationId"),
+                "service_id": sessionStorage.getItem("serviceId")
             }
 
             const response = await axiosInstance.post("/get_filled_form", payload)
@@ -177,6 +179,8 @@ const MultistepForm = () => {
             console.log(error)
         }
     }
+
+    console.log(language)
 
     return (
         <Container className='main-section' fluid>
@@ -242,7 +246,17 @@ const MultistepForm = () => {
                                                             style: { borderColor: "grey", backgroundColor: "white" },  
                                                         }}
                                                     />
+                                                
                                                 </div>
+                                                <div className='mt-sm-0 mb-4 col-sm-12 col-lg-5 mt-lg-3'>
+                                                        <Form.Select aria-label="select language" value={language} onChange={(e) => setLanguage(e.target.value)} size='lg' className='p-2 pb-3'>
+                                                                <option >Select Language</option>
+                                                                <option value="Tamil">Tamil</option>
+                                                                <option value="English">English</option>
+                                                                <option value="Hindi">Hindi</option>
+                                                        </Form.Select>
+                                                </div>
+                                                
                                                 <div>
                                                     <CustomButton
                                                         buttonName={loading && loadingAction === "CallNow" ? <CustomSpinner variant="light" size="sm" /> : "Call now"}

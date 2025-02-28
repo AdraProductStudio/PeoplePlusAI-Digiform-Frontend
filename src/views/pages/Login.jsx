@@ -126,8 +126,8 @@ const Login = () => {
       });
 
       if (response.data.error_code === 200) {
-        Cookies.set("accessToken", response.data.data.access_token)
-        Cookies.set("refreshToken", response.data.data.refresh_token)
+        sessionStorage.setItem("accessToken", response.data.data.access_token)
+        sessionStorage.setItem("refreshToken", response.data.data.refresh_token)
         await handleDigiLockerRequest(response.data.data.access_token)
         toast.success(response.data.message);
 
@@ -159,8 +159,8 @@ const Login = () => {
         }
       })
       if (response.data.error_code === 200) {
-        Cookies.set("digiLockerURL", response.data.data.url)
-        Cookies.set("digiLockerAccessId", response.data.data.id)
+        sessionStorage.setItem("digiLockerURL", response.data.data.url)
+        sessionStorage.setItem("digiLockerAccessId", response.data.data.id)
         setLoading(false)
         navigate("/home");
       } else {
@@ -178,7 +178,7 @@ const Login = () => {
         <Container className='d-flex flex-column justify-content-center align-items-center h-100' >
           <Row className="bg-white px-3 px-md-5 py-3  rounded-3 col-12 col-md-8 col-lg-6 col-xl-5 " >
             <Col className='my-5 '>
-              <h3 className='mb-5 text-center'>Digiform Login</h3>
+              <h3 className='mb-5 text-center digiform-text'>DigiForm</h3>
               <div className="mb-3">
                 <CustomInput
                   autoFocus={true}
@@ -220,12 +220,12 @@ const Login = () => {
               </div>
               <CustomButton
                 buttonName={loading ? <CustomSpinner variant="light" size="sm" /> : "Login"}
-                className={`btn btn-primary mt-5 mx-auto d-block w-100 cup ${loading && 'pe-none opacity-50'}`}
+                className={`btn custom-button-sm mt-5 mx-auto d-block w-100 cup py-2 ${loading && 'pe-none opacity-50'}`}
                 onClick={handleLogin}
               />
-              <p className='mt-3 text-center'>
+              <p className='mt-4 text-center'>
                 Don't have an account?
-                <Link to="/signup" className='signup-login-navigation-link'> Sign up</Link>
+                <Link to="/signup" className='signup-login-navigation-link '> Sign up</Link>
               </p>
             </Col>
           </Row>
