@@ -273,13 +273,13 @@ const Signup = () => {
                 }
               </div>
               <CustomButton
-                buttonName="Signup"
+                buttonName="Sign up"
                 className="btn custom-button-sm mt-5 mx-auto d-block w-100 py-2"
                 onClick={handleSignup}
               />
               <p className='mt-3 text-center'>
                 Already have an account?
-                <Link to="/" className='signup-login-navigation-link'> Login</Link>
+                <Link to="/" className='signup-login-navigation-link'> Log in</Link>
               </p>
             </Col>
           </Row>

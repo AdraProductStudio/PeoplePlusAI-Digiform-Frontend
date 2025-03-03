@@ -1,88 +1,60 @@
 import React, { useContext, useRef, useState } from 'react'
 import { Card, Col, Container, Row } from 'react-bootstrap'
-import { NavLink, useNavigate } from 'react-router-dom'
-import Cookies from 'js-cookie';
 import CustomButton from '../../reusable-components/CustomButton';
 import Image from '../../utils/images';
-import axiosInstance from '../../services/axiosInstance';
 import CustomSpinner from '../../reusable-components/CustomSpinner';
-import { toast } from 'react-toastify';
-import CommonContext from '../../hooks/CommonContext';
-
 
 
 export const HomeCards = () => {
 
-    const navigate = useNavigate()
-
-    const {
-        fetchedPdfBlobFile,
-        setFetchedPdfBlobFile
-    } = useContext(CommonContext)
-
     const [loading, setLoading] = useState(false)
-
-
+    const [loadingAction,setLoadingAction] = useState("")
 
     const cardsArray = [
         {
             id: 1,
             cardImage: Image.SBIForm,
-            cardTitle: "SBI",
+            cardTitle: "SBI Form",
+            name: "SBI.pdf",
             cardButtonText: "Use"
         },
-        // {
-        //     id: 2,
-        //     cardImage: Image.KYCForm,
-        //     cardTitle: "KYC form",
-        //     cardButtonText: "Use"
-        // },
-        // {
-        //     id: 3,
-        //     cardImage: Image.KYCForm,
-        //     cardTitle: "KYC form",
-        //     cardButtonText: "Use"
-        // },
-        // {
-        //     id: 4,
-        //     cardImage: Image.KYCForm,
-        //     cardTitle: "KYC form",
-        //     cardButtonText: "Use"
-        // },
-        // {
-        //     id: 5,
-        //     cardImage: Image.KYCForm,
-        //     cardTitle: "KYC form",
-        //     cardButtonText: "Use"
-        // },
+        {
+            id: 2,
+            cardImage: Image.ICICIForm,
+            cardTitle: "ICICI Form",
+            name: "icici.pdf",
+            cardButtonText: "Use"
+        },
+        {
+            id: 3,
+            cardImage: Image.BankOfBarodaForm,
+            cardTitle: "Bank of Baroda Form",
+            name: "Bank_of_baroda.pdf",
+            cardButtonText: "Use"
+        },
 
     ]
 
-
-
-    const handleUse = async () => {
-        navigate("/update-information");
+    const handleUse = async (selectedPdfName,cardTitle) => {
+        setLoading(true)
+        setLoadingAction(cardTitle)
+        sessionStorage.setItem("selectedPdf", selectedPdfName)
+        window.open(sessionStorage.getItem("digiLockerURL"), "_self");
     };
-
-
 
     return (
         <Container className='main-section' fluid>
             <Container>
-                <Row className='gap-3 justify-content-sm-center justify-content-lg-start'>
+                <Row className='gap-5 justify-content-sm-center justify-content-lg-start'>
                     {cardsArray.map((item) => (
                         <Col key={item.id} xs={12} md={6} lg={4} xl={3} className='my-3 '>
                             <Card className='w-100 w-sm-50 h-100'>
-                                <Card.Img variant="top" src={item.cardImage} />
+                                <Card.Img variant="top" src={item.cardImage} className='img-fluid' alt={item.cardTitle} />
                                 <Card.Body>
-                                    <Card.Title className='card-title'>{item.cardTitle}</Card.Title>
-                                    <div onClick={() => {
-                                        window.open(sessionStorage.getItem("digiLockerURL"), "_self");
-                                        
-                                        // handleUse()
-                                    }}>
+                                    <Card.Title className='card-title text-center'>{item.cardTitle}</Card.Title>
+                                    <div onClick={() => handleUse(item.name,item.cardTitle)}>
                                         <CustomButton
-                                            buttonName={loading ? <CustomSpinner variant="light" size="sm" /> : item.cardButtonText}
+                                            buttonName={loading && loadingAction === item.cardTitle ? <CustomSpinner variant="light" size="sm" /> : item.cardButtonText}
                                             className={`btn custom-button-sm ${loading && 'pe-none opacity-50'}`}
                                         />
                                     </div>

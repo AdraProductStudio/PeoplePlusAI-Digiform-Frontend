@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import {Form, Col, Container, Row } from 'react-bootstrap'
-import Cookies from 'js-cookie';
+import { Form, Col, Container, Row } from 'react-bootstrap'
 import CommonContext from '../../hooks/CommonContext';
 import CustomButton from '../../reusable-components/CustomButton';
 import axiosInstance from '../../services/axiosInstance';
@@ -13,7 +12,7 @@ import CustomSpinner from '../../reusable-components/CustomSpinner';
 const MultistepForm = () => {
     const {
         fetchedPdfBlobFile,
-        setFetchedPdfBlobFile
+        setFetchedPdfBlobFile,
     } = useContext(CommonContext)
 
     const [pdfUrl, setPdfUrl] = useState("");
@@ -33,7 +32,7 @@ const MultistepForm = () => {
     const [step2Enabled, setStep2Enabled] = useState(false)
     const [step3Enabled, setStep3Enabled] = useState(false)
     const [isPdfLoaded, setIsPdfLoaded] = useState(true)
-    const [language,setLanguage] = useState("")
+    const [language, setLanguage] = useState("")
 
 
     useEffect(() => {
@@ -46,7 +45,7 @@ const MultistepForm = () => {
 
             const payload = {
                 request_id: sessionStorage.getItem("digiLockerAccessId"),
-                filename: "SBI.pdf"
+                filename: sessionStorage.getItem("selectedPdf")
             };
             const response = await axiosInstance.post("/filled_form", payload, {
                 headers: {
@@ -85,7 +84,6 @@ const MultistepForm = () => {
         }
     };
 
-
     const handlePhoneInput = (e, phone, mobileNumber) => {
         setMobileNumber((prevState) => ({
             ...prevState,
@@ -96,7 +94,6 @@ const MultistepForm = () => {
         setDialCode(phone.dialCode)
 
     };
-
 
     const handleCallNow = async () => {
 
@@ -112,7 +109,7 @@ const MultistepForm = () => {
                 const payload = {
                     "file_blob": fetchedPdfBlobFile,
                     "phone_number": `+${countryCode}${mobileNumber.mobileNumber}`,
-                    "language" : language
+                    "language": language
 
                 }
                 const response = await axiosInstance.post("/initiate_outbound_call", payload)
@@ -243,20 +240,19 @@ const MultistepForm = () => {
                                                             type: "tel",
                                                             placeholder: "Mobile Number",
                                                             required: true,
-                                                            style: { borderColor: "grey", backgroundColor: "white" },  
+                                                            style: { borderColor: "grey", backgroundColor: "white" },
                                                         }}
                                                     />
-                                                
+
                                                 </div>
                                                 <div className='mt-sm-0 mb-4 col-sm-12 col-lg-5 mt-lg-3'>
-                                                        <Form.Select aria-label="select language" value={language} onChange={(e) => setLanguage(e.target.value)} size='lg' className='p-2 pb-3'>
-                                                                <option >Select Language</option>
-                                                                <option value="Tamil">Tamil</option>
-                                                                <option value="English">English</option>
-                                                                <option value="Hindi">Hindi</option>
-                                                        </Form.Select>
+                                                    <Form.Select aria-label="select language" value={language} onChange={(e) => setLanguage(e.target.value)} size='lg' className='p-2 py-3 fs-6'>
+                                                        <option className='fs-6'>Select Language</option>
+                                                        <option className='fs-6' value="English">English</option>
+                                                        <option className='fs-6' value="Hindi">Hindi</option>
+                                                    </Form.Select>
                                                 </div>
-                                                
+
                                                 <div>
                                                     <CustomButton
                                                         buttonName={loading && loadingAction === "CallNow" ? <CustomSpinner variant="light" size="sm" /> : "Call now"}
@@ -265,7 +261,7 @@ const MultistepForm = () => {
                                                     />
                                                     <CustomButton
                                                         buttonName={loading && loadingAction === "GenerateNewPDF" ? <CustomSpinner variant="light" size="sm" /> : "Generate new PDF"}
-                                                        className={`btn mt-4 cup generate-new-pdf-button  py-2 col-sm-12 col-md-4 col-lg-2  ${loading || !generateNewPdfEnabled && 'pe-none opacity-50'}`}
+                                                        className={`btn mt-4 cup generate-new-pdf-button  py-2 col-sm-12 col-md-3 col-lg-2  ${loading || !generateNewPdfEnabled && 'pe-none opacity-50'}`}
                                                         onClick={handleGenerateNewPDF}
                                                     />
                                                 </div>

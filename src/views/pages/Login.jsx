@@ -219,7 +219,7 @@ const Login = () => {
                 }
               </div>
               <CustomButton
-                buttonName={loading ? <CustomSpinner variant="light" size="sm" /> : "Login"}
+                buttonName={loading ? <CustomSpinner variant="light" size="sm" /> : "Log in"}
                 className={`btn custom-button-sm mt-5 mx-auto d-block w-100 cup py-2 ${loading && 'pe-none opacity-50'}`}
                 onClick={handleLogin}
               />

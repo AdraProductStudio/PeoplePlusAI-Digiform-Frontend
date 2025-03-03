@@ -3,10 +3,7 @@ import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import CustomButton from '../../reusable-components/CustomButton';
 import Image from '../../utils/images'
-import Cookies from 'js-cookie'
 import { useNavigate } from 'react-router-dom';
-
-
 
 
 const Header = ({ currentPage }) => {
@@ -19,6 +16,7 @@ const Header = ({ currentPage }) => {
         sessionStorage.removeItem("digiLockerAccessId")
         sessionStorage.removeItem("conversationId")
         sessionStorage.removeItem("serviceId")
+        sessionStorage.removeItem("selectedPdf")
         navigate("/");
     }
 
@@ -33,7 +31,7 @@ const Header = ({ currentPage }) => {
                     (currentPage === "Home" || currentPage === "UpdateInformation") &&
                     <Navbar.Collapse className="justify-content-end">
                         <CustomButton
-                            buttonName="Logout"
+                            buttonName="Log out"
                             className='px-3 btn logout-button'
                             onClick={handleLogout}
                         />
