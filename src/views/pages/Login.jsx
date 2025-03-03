@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { Card, Col, Container, Row } from 'react-bootstrap'
+import React, { useState } from 'react'
+import { Col, Container, Row } from 'react-bootstrap'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import CustomInput from '../../reusable-components/CustomInput'
@@ -8,7 +8,6 @@ import CustomInputGroup from '../../reusable-components/CustomInputGroup'
 import { Link, useNavigate } from 'react-router-dom'
 import axiosInstance from '../../services/axiosInstance'
 import { toast } from 'react-toastify'
-import Cookies from 'js-cookie'
 import sha256 from 'sha256';
 import CustomSpinner from '../../reusable-components/CustomSpinner'
 
@@ -90,8 +89,6 @@ const Login = () => {
   }
 
   const handleLogin = async () => {
-
-    console.log("login")
     let hasError = false;
 
     // ✅ Input validation
@@ -130,9 +127,6 @@ const Login = () => {
         sessionStorage.setItem("refreshToken", response.data.data.refresh_token)
         await handleDigiLockerRequest(response.data.data.access_token)
         toast.success(response.data.message);
-
-
-
       } else {
         setLoading(false)
         toast.error(response.data.message);
@@ -167,7 +161,7 @@ const Login = () => {
         toast.error(response.data.message)
       }
     } catch (error) {
-      console.log(error)
+      toast.error(response.data.message)
     }
   }
 

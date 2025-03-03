@@ -21,6 +21,12 @@
   src: url(../src/assets/BespokeStencil_Complete/Fonts/WEB/fonts/BespokeStencil-Variable.ttf);
 }
 
+iframe {
+  width: 100%;
+  height: 500px;
+  border: none;
+}
+
 .digiform-text {
   font-family: "BespokeStencil-Variable";
   font-size: 3rem;

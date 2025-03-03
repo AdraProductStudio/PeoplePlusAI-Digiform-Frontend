@@ -9,6 +9,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import axiosInstance from '../../services/axiosInstance'
 import { useDispatch, useSelector } from 'react-redux'
 import sha256 from 'sha256';
+import { toast } from 'react-toastify'
 
 
 
@@ -74,7 +75,7 @@ const Signup = () => {
     }
   };
 
-  
+
 
   const validatePassword = (password) => {
     const minLengthCheck = password.length >= 8;
@@ -187,22 +188,23 @@ const Signup = () => {
     }
 
     try {
-     
 
       const payload = {
         "username": signupInputs?.username,
         "password": sha256(signupInputs?.password?.trim())
       };
 
-
       const response = await axiosInstance.post('/signup', payload);
       if (response.data.error_code === 200) {
         navigate("/");
+        toast.success(response.data.message);
+      } else if (response.data.error_code === 409) {
+        toast.warn(response.data.message);
       } else {
-        console.error("Signup failed:", response.data.message || "Unknown error");
+        toast.error(response.data.message);
       }
     } catch (error) {
-      console.log(error);
+      toast.error(response.data.message);
     }
   };
 
