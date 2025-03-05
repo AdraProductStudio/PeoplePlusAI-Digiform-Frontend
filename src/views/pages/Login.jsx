@@ -219,7 +219,7 @@ const Login = () => {
               />
               <p className='mt-4 text-center'>
                 Don't have an account?
-                <Link to="/signup" className='signup-login-navigation-link '> Sign up</Link>
+                <Link to="/register" className='signup-login-navigation-link'> Register</Link>
               </p>
             </Col>
           </Row>

@@ -64,10 +64,8 @@ const MultistepForm = () => {
             setPageLoadingModal(true);
 
             const payload = {
-                // request_id: sessionStorage.getItem("digiLockerAccessId"),
-                request_id: "33644a80-db7b-407e-8b1a-ed21eee96642",
-                filename: "SBI.pdf"
-                // filename: sessionStorage.getItem("selectedPdf")
+                request_id: sessionStorage.getItem("digiLockerAccessId"),
+                filename: sessionStorage.getItem("selectedPdf")
             };
             const response = await axiosInstance.post("/filled_form", payload, {
                 headers: {
@@ -228,18 +226,18 @@ const MultistepForm = () => {
                                         </a>
                                     </div>
                                     :
-                                    // <iframe
-                                    //     src={newPdfUrl}
-                                    //     title="Filled PDF"
-                                    //     style={{ width: "60%", height: "100%", border: "none" }}
-                                    // />
+                                    <iframe
+                                        src={newPdfUrl}
+                                        title="Filled PDF"
+                                        style={{ width: "60%", height: "100%", border: "none" }}
+                                    />
 
-                                    <div style={{ height: '600px', width: '100%' }}>
-                                        <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
-                                            <Toolbar />
-                                            <Viewer fileUrl={newPdfUrl} plugins={[toolbarPluginInstance]} />
-                                        </Worker>
-                                    </div>
+                                    // <div style={{ height: '600px', width: '100%' }}>
+                                    //     <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
+                                    //         <Toolbar />
+                                    //         <Viewer fileUrl={newPdfUrl} plugins={[toolbarPluginInstance]} />
+                                    //     </Worker>
+                                    // </div>
                                 :
                                 pdfUrl ?
                                     isMobileScreen ?
@@ -250,17 +248,17 @@ const MultistepForm = () => {
                                             </a>
                                         </div>
                                         :
-                                        // <iframe
-                                        //     src={pdfUrl}
-                                        //     title="Filled PDF"
-                                        //     style={{ width: "60%", height: "100vh", border: "none" }}
-                                        // />
-                                        <div style={{ height: '600px', width: '100%' }}>
-                                            <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
-                                                <Toolbar />
-                                                <Viewer fileUrl={pdfUrl} plugins={[toolbarPluginInstance]} />
-                                            </Worker>
-                                        </div>
+                                        <iframe
+                                            src={pdfUrl}
+                                            title="Filled PDF"
+                                            style={{ width: "60%", height: "100vh", border: "none" }}
+                                        />
+                                        // <div style={{ height: '600px', width: '100%' }}>
+                                        //     <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
+                                        //         <Toolbar />
+                                        //         <Viewer fileUrl={pdfUrl} plugins={[toolbarPluginInstance]} />
+                                        //     </Worker>
+                                        // </div>
                                     :
                                     null
                             }
