@@ -32,6 +32,13 @@ export const HomeCards = () => {
             name: "Bank_of_baroda.pdf",
             cardButtonText: "Use"
         },
+        {
+            id: 4,
+            cardImage: Image.PNBForm,
+            cardTitle: "Punjab National Bank Form",
+            name: "PNB.pdf",
+            cardButtonText: "Use"
+        },
 
     ]
 

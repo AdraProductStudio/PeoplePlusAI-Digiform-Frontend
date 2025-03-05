@@ -4,6 +4,7 @@ import KYCForm from '../assets/images/KYC_individual_form.jpg'
 import SBIForm from '../assets/images/SBI_form.jpg'
 import ICICIForm from '../assets/images/icici.jpg'
 import BankOfBarodaForm from '../assets/images/Bank_of_baroda.jpg'
+import PNBForm from '../assets/images/PNB.jpg'
 
 
 const Image = {
@@ -12,7 +13,8 @@ const Image = {
     KYCForm,
     SBIForm,
     ICICIForm,
-    BankOfBarodaForm
+    BankOfBarodaForm,
+    PNBForm
 }
 
 export default Image

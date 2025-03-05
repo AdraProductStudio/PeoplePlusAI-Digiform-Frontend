@@ -26,6 +26,9 @@ function App() {
             <Route path='/update-information' element={<UpdateInformation />} />
           </Route>
 
+          <Route path='*' element={<h1>Page not found</h1>} />
+
+
         </Routes>
       </BrowserRouter>
     </>

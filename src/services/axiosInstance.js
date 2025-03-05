@@ -2,8 +2,8 @@ import axios from "axios";
 import Cookies from "js-cookie"; // Ensure js-cookie is installed
 
 const axiosInstance = axios.create({
-    // baseURL: `http://10.10.11.29:5000`,
-    baseURL: `https://digiformapi.adraproductstudio.com:5000`,
+    baseURL: `http://10.10.11.29:5000`,
+    // baseURL: `https://digiformapi.adraproductstudio.com:5000`,
     headers: {
         "Content-Type": "application/json",
     },
@@ -39,8 +39,8 @@ axiosInstance.interceptors.response.use(
             }
 
             try {
-                // const response = await axios.get("http://10.10.11.29:5000/refresh", {
-                const response = await axios.get("https://digiformapi.adraproductstudio.com:5000/refresh", {
+                const response = await axios.get("http://10.10.11.29:5000/refresh", {
+                // const response = await axios.get("https://digiformapi.adraproductstudio.com:5000/refresh", {
                     headers: {
                         Authorization: `Bearer ${refreshToken}`
                     },

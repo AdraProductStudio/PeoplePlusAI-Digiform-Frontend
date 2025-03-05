@@ -7,12 +7,24 @@ import { toast } from 'react-toastify';
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/material.css";
 import CustomSpinner from '../../reusable-components/CustomSpinner';
+import { Worker, Viewer } from '@react-pdf-viewer/core';
+import { toolbarPlugin } from '@react-pdf-viewer/toolbar';
+import '@react-pdf-viewer/core/lib/styles/index.css';
+import '@react-pdf-viewer/toolbar/lib/styles/index.css';
+
 
 
 const MultistepForm = () => {
+
+    const toolbarPluginInstance = toolbarPlugin();
+    const { Toolbar } = toolbarPluginInstance;
+
+
     const {
         fetchedPdfBlobFile,
         setFetchedPdfBlobFile,
+        fetchedNewPdfBlobFile,
+        setFetchedNewPdfBlobFile
     } = useContext(CommonContext)
 
     const [isMobileScreen, setIsMobileScreen] = useState(window.innerWidth < 768);
@@ -52,14 +64,18 @@ const MultistepForm = () => {
             setPageLoadingModal(true);
 
             const payload = {
-                request_id: sessionStorage.getItem("digiLockerAccessId"),
-                filename: sessionStorage.getItem("selectedPdf")
+                // request_id: sessionStorage.getItem("digiLockerAccessId"),
+                request_id: "33644a80-db7b-407e-8b1a-ed21eee96642",
+                filename: "SBI.pdf"
+                // filename: sessionStorage.getItem("selectedPdf")
             };
             const response = await axiosInstance.post("/filled_form", payload, {
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`
                 }
             });
+
+            console.log("response.data filled form", response.data)
 
             if (response.data.error_code === 200) {
                 setPageLoadingModal(false);
@@ -156,6 +172,8 @@ const MultistepForm = () => {
             }
 
             const response = await axiosInstance.post("/get_filled_form", payload)
+            console.log("response.data new filled", response.data)
+
             if (response.data.error_code === 200) {
                 setLoading(false)
                 setStep(1)
@@ -210,26 +228,39 @@ const MultistepForm = () => {
                                         </a>
                                     </div>
                                     :
-                                    <iframe
-                                        src={newPdfUrl}
-                                        title="Filled PDF"
-                                        style={{ width: "60%", height: "100%", border: "none" }}
-                                    />
+                                    // <iframe
+                                    //     src={newPdfUrl}
+                                    //     title="Filled PDF"
+                                    //     style={{ width: "60%", height: "100%", border: "none" }}
+                                    // />
+
+                                    <div style={{ height: '600px', width: '100%' }}>
+                                        <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
+                                            <Toolbar />
+                                            <Viewer fileUrl={newPdfUrl} plugins={[toolbarPluginInstance]} />
+                                        </Worker>
+                                    </div>
                                 :
                                 pdfUrl ?
                                     isMobileScreen ?
-                                        <div className="d-flex flex-column justify-content-center align-items-center h100">
+                                        <div className="d-flex flex-column justify-content-center align-items-center h-100">
                                             <img src="https://techterms.com/img/lg/pdf_109.png" width={50} className='d-block' alt="" />
                                             <a href={pdfUrl} className='d-block mt-3' target="_blank" rel="noopener noreferrer">
                                                 Open PDF
                                             </a>
                                         </div>
                                         :
-                                        <iframe
-                                            src={pdfUrl}
-                                            title="Filled PDF"
-                                            style={{ width: "60%", height: "100vh", border: "none" }}
-                                        />
+                                        // <iframe
+                                        //     src={pdfUrl}
+                                        //     title="Filled PDF"
+                                        //     style={{ width: "60%", height: "100vh", border: "none" }}
+                                        // />
+                                        <div style={{ height: '600px', width: '100%' }}>
+                                            <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
+                                                <Toolbar />
+                                                <Viewer fileUrl={pdfUrl} plugins={[toolbarPluginInstance]} />
+                                            </Worker>
+                                        </div>
                                     :
                                     null
                             }
