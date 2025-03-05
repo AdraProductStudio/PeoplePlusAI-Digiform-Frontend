@@ -273,6 +273,7 @@ const Signup = () => {
                   error.confirmPasswordError &&
                   <p className="text-danger">{errorMessage.confirmPasswordErrorMessage}</p>
                 }
+                
               </div>
               <CustomButton
                 buttonName="Sign up"
