@@ -3,9 +3,12 @@ import { Card, Col, Container, Row } from 'react-bootstrap'
 import CustomButton from '../../reusable-components/CustomButton';
 import Image from '../../utils/images';
 import CustomSpinner from '../../reusable-components/CustomSpinner';
+import { useNavigate } from 'react-router-dom';
 
 
 export const HomeCards = () => {
+
+    const navigate = useNavigate()
 
     const [loading, setLoading] = useState(false)
     const [loadingAction,setLoadingAction] = useState("")
@@ -30,6 +33,13 @@ export const HomeCards = () => {
             cardImage: Image.BankOfBarodaForm,
             cardTitle: "Bank of Baroda Form",
             name: "Bank_of_baroda.pdf",
+            cardButtonText: "Use"
+        },
+        {
+            id: 4,
+            cardImage: Image.PNBForm,
+            cardTitle: "Punjab National Bank Form",
+            name: "PNB.pdf",
             cardButtonText: "Use"
         },
 

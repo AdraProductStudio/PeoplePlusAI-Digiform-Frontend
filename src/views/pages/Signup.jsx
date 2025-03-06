@@ -273,10 +273,9 @@ const Signup = () => {
                   error.confirmPasswordError &&
                   <p className="text-danger">{errorMessage.confirmPasswordErrorMessage}</p>
                 }
-                
               </div>
               <CustomButton
-                buttonName="Sign up"
+                buttonName="Register"
                 className="btn custom-button-sm mt-5 mx-auto d-block w-100 py-2"
                 onClick={handleSignup}
               />

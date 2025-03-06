@@ -6,6 +6,7 @@ import Home from './views/pages/Home'
 import UpdateInformation from './views/pages/UpdateInformation'
 import ProtectedRoute from './views/routes/ProtectedRoute'
 import { ToastContainer } from "react-toastify";
+import PageNotFound from './views/pages/PageNotFound'
 
 const basename = import.meta.env.MODE === "development" ? "/" : `/${import.meta.env.VITE_PUBLIC_URL}`;
 
@@ -19,12 +20,15 @@ function App() {
 
         <Routes>
           <Route index path='/' element={<Login />} />
-          <Route path='/signup' element={<Signup />} />
+          <Route path='/register' element={<Signup />} />
 
           <Route element={<ProtectedRoute />}>
             <Route path='/home' element={<Home />} />
             <Route path='/update-information' element={<UpdateInformation />} />
           </Route>
+
+          <Route path='*' element={<PageNotFound />} />
+
 
         </Routes>
       </BrowserRouter>

@@ -15,6 +15,14 @@ const MultistepForm = () => {
         setFetchedPdfBlobFile,
     } = useContext(CommonContext)
 
+    const [isMobileScreen, setIsMobileScreen] = useState(window.innerWidth < 768);
+
+    useEffect(() => {
+        const handleResize = () => setIsMobileScreen(window.innerWidth < 768);
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
     const [pdfUrl, setPdfUrl] = useState("");
     const [newPdfUrl, setNewPdfUrl] = useState("");
 
@@ -179,7 +187,7 @@ const MultistepForm = () => {
 
     return (
         <Container className='main-section' fluid>
-            <Container className='p-5 h-100'>
+            <Container className='p-3 p-md-5 h-100'>
                 <Row className='card h-100 rounded-5 border-0 flex-column'>
                     <div className="progress-container mt-5 px-5 mx-auto col-sm-12 col-lg-9">
                         <div className="progress-step">
@@ -192,20 +200,36 @@ const MultistepForm = () => {
                     </div>
                     {
                         step === 1 &&
-                        <Col className="overflow-scroll w-100 col d-flex justify-content-center">
+                        <Col className="overflow-scroll w-100 col d-flex justify-content-center ">
                             {newPdfUrl ?
-                                <iframe
-                                    src={newPdfUrl}
-                                    title="Filled PDF"
-                                    style={{ width: "60%", height: "100%", border: "none" }}
-                                />
-                                :
-                                pdfUrl ?
+                                isMobileScreen ?
+                                    <div className="d-flex flex-column justify-content-center align-items-center h100">
+                                        <img src="https://techterms.com/img/lg/pdf_109.png" width={50} className='d-block' alt="" />
+                                        <a href={newPdfUrl} className='d-block mt-3' target="_blank" rel="noopener noreferrer">
+                                            Open updated PDF
+                                        </a>
+                                    </div>
+                                    :
                                     <iframe
-                                        src={pdfUrl}
+                                        src={newPdfUrl}
                                         title="Filled PDF"
                                         style={{ width: "60%", height: "100%", border: "none" }}
                                     />
+                                :
+                                pdfUrl ?
+                                    isMobileScreen ?
+                                        <div className="d-flex flex-column justify-content-center align-items-center h100">
+                                            <img src="https://techterms.com/img/lg/pdf_109.png" width={50} className='d-block' alt="" />
+                                            <a href={pdfUrl} className='d-block mt-3' target="_blank" rel="noopener noreferrer">
+                                                Open PDF
+                                            </a>
+                                        </div>
+                                        :
+                                        <iframe
+                                            src={pdfUrl}
+                                            title="Filled PDF"
+                                            style={{ width: "60%", height: "100vh", border: "none" }}
+                                        />
                                     :
                                     null
                             }
@@ -255,7 +279,7 @@ const MultistepForm = () => {
                                                     <CustomButton
                                                         buttonName={loading && loadingAction === "CallNow" ? <CustomSpinner variant="light" size="sm" /> : "Call now"}
                                                         className={`btn btn-success d-block cup call-now-button col-sm-12 col-md-3 col-lg-2 
-                                                                    ${loading || !mobileNumber.mobileNumber  || language === "Select Language"  ? 'pe-none opacity-50' : ''}`
+                                                                    ${loading || !mobileNumber.mobileNumber || language === "Select Language" ? 'pe-none opacity-50' : ''}`
                                                         }
                                                         onClick={handleCallNow}
                                                     />
