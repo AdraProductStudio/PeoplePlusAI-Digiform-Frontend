@@ -190,7 +190,7 @@ const Signup = () => {
     try {
 
       const payload = {
-        "username": signupInputs?.username,
+        "username": signupInputs?.username?.trim(),
         "password": sha256(signupInputs?.password?.trim())
       };
 
