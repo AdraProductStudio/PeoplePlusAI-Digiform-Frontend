@@ -113,12 +113,10 @@ const Header = ({ currentPage }) => {
                 centered
                 backdrop="static"
             >
-                <Modal.Header closeButton>
-                    <Modal.Title id="contained-modal-title-vcenter">
-                        <h4 className='mb-0 ' style={{ color: '#667da7' }}>Digiform – Forms Made Easy. Just Talk, We Fill!</h4>
-                    </Modal.Title>
-                </Modal.Header>
                 <Modal.Body >
+
+                    <h3 className='my-3 mb-4 text-center ' style={{ color: '#5b719b' }}>Digiform – Forms Made Easy. Just Talk, We Fill!</h3>
+
                     <p className='px-2' style={{ fontWeight: '450', fontSize: '16px' }}>
                         DigiForm is an AI-powered automated form-filling solution that securely retrieves user data via DigiLocker and completes missing details through an interactive voice agent.
                     </p>
@@ -149,14 +147,16 @@ const Header = ({ currentPage }) => {
                         <p>Download or print the finalized document for submission.</p>
 
                     </div>
+
+                    <div className="mx-2 my-3">
+                        <CustomButton
+                            buttonName="Close"
+                            className='px-3 mt-2 w-100 btn logout-button'
+                            onClick={() => setModalShow(false)}
+                        />
+                    </div>
+
                 </Modal.Body>
-                <Modal.Footer>
-                    <CustomButton
-                        buttonName="Close"
-                        className='px-3 btn logout-button'
-                        onClick={() => setModalShow(false)}
-                    />
-                </Modal.Footer>
             </Modal>
         </>
     )
