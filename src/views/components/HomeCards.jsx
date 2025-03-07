@@ -1,17 +1,14 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Card, Col, Container, Row } from 'react-bootstrap'
 import CustomButton from '../../reusable-components/CustomButton';
 import Image from '../../utils/images';
 import CustomSpinner from '../../reusable-components/CustomSpinner';
-import { useNavigate } from 'react-router-dom';
 
 
 export const HomeCards = () => {
 
-    const navigate = useNavigate()
-
     const [loading, setLoading] = useState(false)
-    const [loadingAction,setLoadingAction] = useState("")
+    const [loadingAction, setLoadingAction] = useState("")
 
     const cardsArray = [
         {
@@ -47,9 +44,9 @@ export const HomeCards = () => {
 
     useEffect(() => {
         setLoading(false)
-    },[])
+    }, [])
 
-    const handleUse = async (selectedPdfName,cardTitle) => {
+    const handleUse = async (selectedPdfName, cardTitle) => {
         setLoading(true)
         setLoadingAction(cardTitle)
         sessionStorage.setItem("selectedPdf", selectedPdfName)
@@ -66,7 +63,7 @@ export const HomeCards = () => {
                                 <Card.Img variant="top" src={item.cardImage} className='img-fluid' alt={item.cardTitle} />
                                 <Card.Body>
                                     <Card.Title className='card-title text-center'>{item.cardTitle}</Card.Title>
-                                    <div onClick={() => handleUse(item.name,item.cardTitle)} className={`${loading && 'pe-none opacity-50'}`}>
+                                    <div onClick={() => handleUse(item.name, item.cardTitle)} className={`${loading && 'pe-none opacity-50'}`}>
                                         <CustomButton
                                             buttonName={loading && loadingAction === item.cardTitle ? <CustomSpinner variant="light" size="sm" /> : item.cardButtonText}
                                             className={`btn custom-button-sm `}

@@ -5,7 +5,7 @@ import Footer from '../components/Footer'
 import CustomInput from '../../reusable-components/CustomInput'
 import CustomButton from '../../reusable-components/CustomButton'
 import CustomInputGroup from '../../reusable-components/CustomInputGroup'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, replace, useNavigate } from 'react-router-dom'
 import axiosInstance from '../../services/axiosInstance'
 import { toast } from 'react-toastify'
 import sha256 from 'sha256';

@@ -26,6 +26,17 @@ const Header = ({ currentPage }) => {
         return () => window.removeEventListener("resize", handleResize);
     }, []);
 
+    useEffect(() => {
+        const isFirstVisit = sessionStorage.getItem("isDigiFormFirstVisit");
+        if (!isFirstVisit) {
+            if (window.location.pathname === "/home") {
+                console.log(window.location.pathname)
+                setModalShow(true)
+                sessionStorage.setItem("isDigiFormFirstVisit", "true");
+            }
+        }
+    }, []);
+
     const handleLogout = () => {
         sessionStorage.removeItem("accessToken")
         sessionStorage.removeItem("refreshToken")
@@ -34,6 +45,8 @@ const Header = ({ currentPage }) => {
         sessionStorage.removeItem("conversationId")
         sessionStorage.removeItem("serviceId")
         sessionStorage.removeItem("selectedPdf")
+        sessionStorage.removeItem("isDigiFormFirstVisit")
+
         navigate("/");
     }
 
@@ -45,6 +58,7 @@ const Header = ({ currentPage }) => {
         sessionStorage.removeItem("conversationId")
         sessionStorage.removeItem("serviceId")
         sessionStorage.removeItem("selectedPdf")
+        sessionStorage.removeItem("isDigiFormFirstVisit")
         navigate("/");
     }
 
