@@ -23,8 +23,6 @@ const MultistepForm = () => {
     const {
         fetchedPdfBlobFile,
         setFetchedPdfBlobFile,
-        fetchedNewPdfBlobFile,
-        setFetchedNewPdfBlobFile
     } = useContext(CommonContext)
 
     const [isMobileScreen, setIsMobileScreen] = useState(window.innerWidth < 768);
@@ -330,7 +328,7 @@ const MultistepForm = () => {
                     role="dialog"
                     style={{
                         display: "block",
-                        backgroundColor: "rgba(0, 0, 0, 0.5)", // Black backdrop
+                        backgroundColor: "rgba(0, 0, 0, 0.5)", 
                         position: "fixed",
                         top: 0,
                         left: 0,

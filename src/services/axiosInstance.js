@@ -1,15 +1,12 @@
 import axios from "axios";
-import Cookies from "js-cookie"; // Ensure js-cookie is installed
 
 const axiosInstance = axios.create({
-    // baseURL: `http://10.10.11.29:5000`,
-    baseURL: `https://digiformapi.adraproductstudio.com:5000`,
+    baseURL: `${import.meta.env.VITE_REACT_APP_API_URL}`,
     headers: {
         "Content-Type": "application/json",
     },
 });
 
-// ✅ Intercept all requests and attach the access token if available
 axiosInstance.interceptors.request.use((config) => {
     const token = sessionStorage.getItem("accessToken");
     if (token) {
@@ -23,7 +20,7 @@ axiosInstance.interceptors.request.use((config) => {
     return config;
 }, (error) => Promise.reject(error));
 
-// ✅ Handle 401 errors and refresh token if needed
+
 axiosInstance.interceptors.response.use(
     (response) => response,
     async (error) => {
@@ -39,8 +36,7 @@ axiosInstance.interceptors.response.use(
             }
 
             try {
-                // const response = await axios.get("http://10.10.11.29:5000/refresh", {
-                const response = await axios.get("https://digiformapi.adraproductstudio.com:5000/refresh", {
+                const response = await axios.get(`${import.meta.env.VITE_REACT_APP_API_URL}/refresh`, {
                     headers: {
                         Authorization: `Bearer ${refreshToken}`
                     },
@@ -49,7 +45,6 @@ axiosInstance.interceptors.response.use(
                 if (response.data && response.data.data.access_token) {
                     const newAccessToken = response.data.data.access_token;
                     sessionStorage.setItem("accessToken", newAccessToken);
-                    // ✅ Retry original request with new token
                     originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
                     return axiosInstance(originalRequest);
                 } else {

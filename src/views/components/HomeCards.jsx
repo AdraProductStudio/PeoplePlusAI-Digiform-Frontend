@@ -39,6 +39,13 @@ export const HomeCards = () => {
             name: "PNB.pdf",
             cardButtonText: "Use"
         },
+        {
+            id: 5,
+            cardImage: Image.constructionWorkerForm,
+            cardTitle: "Construction Worker Form",
+            name: "Construction_worker_form.pdf",
+            cardButtonText: "Use"
+        },
 
     ]
 
@@ -58,15 +65,15 @@ export const HomeCards = () => {
             <Container>
                 <Row className='gap-5 justify-content-sm-center justify-content-lg-start'>
                     {cardsArray.map((item) => (
-                        <Col key={item.id} xs={12} md={6} lg={4} xl={3} className='my-3 '>
-                            <Card className='w-100 w-sm-50 h-100'>
+                        <Col key={item.id} xs={12} md={6} lg={4} xl={3} className='my-3'>
+                            <Card className='w-100 w-sm-50 h-100 '>
                                 <Card.Img variant="top" src={item.cardImage} className='img-fluid' alt={item.cardTitle} />
                                 <Card.Body>
                                     <Card.Title className='card-title text-center'>{item.cardTitle}</Card.Title>
                                     <div onClick={() => handleUse(item.name, item.cardTitle)} className={`${loading && 'pe-none opacity-50'}`}>
                                         <CustomButton
                                             buttonName={loading && loadingAction === item.cardTitle ? <CustomSpinner variant="light" size="sm" /> : item.cardButtonText}
-                                            className={`btn custom-button-sm `}
+                                            className={`btn custom-button-sm`}
                                         />
                                     </div>
                                 </Card.Body>

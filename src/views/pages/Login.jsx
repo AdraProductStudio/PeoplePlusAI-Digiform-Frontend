@@ -91,7 +91,6 @@ const Login = () => {
   const handleLogin = async () => {
     let hasError = false;
 
-    // ✅ Input validation
     if (!loginInputs?.username?.trim()) {
       setError(prevState => ({ ...prevState, usernameError: true }));
       setErrorMessage(prevState => ({ ...prevState, usernameErrorMessage: "Username should not be empty" }));
@@ -139,8 +138,8 @@ const Login = () => {
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
-      e.preventDefault(); // Prevent accidental form submission if inside a form
-      handleLogin(); // Call your signup function
+      e.preventDefault(); 
+      handleLogin(); 
     }
   };
 

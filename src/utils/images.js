@@ -5,7 +5,7 @@ import SBIForm from '../assets/images/SBI_form.jpg'
 import ICICIForm from '../assets/images/icici.jpg'
 import BankOfBarodaForm from '../assets/images/Bank_of_baroda.jpg'
 import PNBForm from '../assets/images/PNB.jpg'
-
+import constructionWorkerForm from '../assets/images/Construction_worker_form.jpg'
 
 const Image = {
     adraLogo,
@@ -14,7 +14,8 @@ const Image = {
     SBIForm,
     ICICIForm,
     BankOfBarodaForm,
-    PNBForm
+    PNBForm,
+    constructionWorkerForm
 }
 
 export default Image
