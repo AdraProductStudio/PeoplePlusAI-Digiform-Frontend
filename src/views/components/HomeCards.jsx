@@ -43,7 +43,7 @@ export const HomeCards = () => {
             id: 5,
             cardImage: Image.constructionWorkerForm,
             cardTitle: "Construction Worker Form",
-            name: "Construction_worker_form.pdf",
+            name: "Construction_worker_form_1.pdf",
             cardButtonText: "Use"
         },
 
@@ -63,7 +63,7 @@ export const HomeCards = () => {
     return (
         <Container className='main-section' fluid>
             <Container>
-                <Row className='gap-5 justify-content-sm-center justify-content-lg-start'>
+                <Row className='justify-content-lg-start'>
                     {cardsArray.map((item) => (
                         <Col key={item.id} xs={12} md={6} lg={4} xl={3} className='my-3'>
                             <Card className='w-100 w-sm-50 h-100 '>
