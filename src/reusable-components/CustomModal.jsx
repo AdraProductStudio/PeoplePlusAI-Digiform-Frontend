@@ -4,12 +4,17 @@ import { Button, Form, Modal } from 'react-bootstrap'
 const CustomModal = ({
     modalHeader,
     show,
+    modalTitle,
     handleHideModal,
     modalBody,
     isModalCentered,
     modalBackdropType,
     className,
-    modalFooter
+    modalFooter,
+    onHide,
+    size,
+    centered,
+    backdrop,
 
 }) => {
 
@@ -18,20 +23,25 @@ const CustomModal = ({
         <div>
             <Modal
                 show={show}
-                onHide={handleHideModal}
-                centered={isModalCentered}
-                backdrop={modalBackdropType}
+                size={size}
+                onHide={onHide}
+                centered={centered}
+                backdrop={backdrop}
                 className={className}
             >
-                <Modal.Header closeButton>
-                    <Modal.Title>{modalHeader}</Modal.Title>
-                </Modal.Header>
+                {(modalHeader || modalTitle) &&
+                    <Modal.Header closeButton>
+                        <Modal.Title>{modalHeader}</Modal.Title>
+                    </Modal.Header>}
                 <Modal.Body>
                     {modalBody}
                 </Modal.Body>
-                <Modal.Footer className='d-block'>
-                    {modalFooter}
-                </Modal.Footer>
+                {modalFooter &&
+                    <Modal.Footer className='d-block'>
+                        {modalFooter}
+                    </Modal.Footer>
+                }
+
             </Modal>
 
         </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Col, Container, Row } from 'react-bootstrap'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
@@ -30,6 +30,21 @@ const Login = () => {
     passwordError: false,
   })
 
+  useEffect(() => {
+    const accessToken = sessionStorage.getItem("accessToken");
+    const refreshToken = sessionStorage.getItem("refreshToken");
+    const digiLockerURL = sessionStorage.getItem("digiLockerURL");
+    const digiLockerAccessId = sessionStorage.getItem("digiLockerAccessId");
+    const isDigiFormFirstVisit = sessionStorage.getItem("isDigiFormFirstVisit");
+
+    if (accessToken || refreshToken || digiLockerURL || digiLockerAccessId || isDigiFormFirstVisit) {
+      sessionStorage.removeItem("accessToken");
+      sessionStorage.removeItem("refreshToken");
+      sessionStorage.removeItem("digiLockerURL");
+      sessionStorage.removeItem("digiLockerAccessId");
+      sessionStorage.removeItem("isDigiFormFirstVisit");
+    }
+  }, []);
 
   const handleShowPassword = (name) => {
     switch (name) {
@@ -138,8 +153,8 @@ const Login = () => {
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
-      e.preventDefault(); 
-      handleLogin(); 
+      e.preventDefault();
+      handleLogin();
     }
   };
 
@@ -183,7 +198,7 @@ const Login = () => {
                   onChange={(e) => handleLoginInputs(e)}
                   value={loginInputs?.username || ""}
                   className="mb-2"
-                  onBlur={() => handleBlur("username")}
+                // onBlur={() => handleBlur("username")}
                 />
                 {
                   error.usernameError &&
@@ -203,7 +218,7 @@ const Login = () => {
                   onChange={handleLoginInputs}
                   value={loginInputs.password || ""}
                   className="mb-2"
-                  onBlur={() => handleBlur("password")}
+                  // onBlur={() => handleBlur("password")}
                   onKeyDown={handleKeyDown}
                 />
                 {

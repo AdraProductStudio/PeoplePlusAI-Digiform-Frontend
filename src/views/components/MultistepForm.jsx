@@ -11,6 +11,7 @@ import { Worker, Viewer } from '@react-pdf-viewer/core';
 import { toolbarPlugin } from '@react-pdf-viewer/toolbar';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/toolbar/lib/styles/index.css';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -19,6 +20,7 @@ const MultistepForm = () => {
     const toolbarPluginInstance = toolbarPlugin();
     const { Toolbar } = toolbarPluginInstance;
 
+    const navigate = useNavigate()
 
     const {
         fetchedPdfBlobFile,
@@ -153,7 +155,7 @@ const MultistepForm = () => {
     }
 
     const handleFinish = () => {
-        toast.success("Finished")
+        navigate("/home");
     }
 
     const handleGenerateNewPDF = async () => {
@@ -328,7 +330,7 @@ const MultistepForm = () => {
                     role="dialog"
                     style={{
                         display: "block",
-                        backgroundColor: "rgba(0, 0, 0, 0.5)", 
+                        backgroundColor: "rgba(0, 0, 0, 0.5)",
                         position: "fixed",
                         top: 0,
                         left: 0,

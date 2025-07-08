@@ -11,39 +11,39 @@ export const HomeCards = () => {
     const [loadingAction, setLoadingAction] = useState("")
 
     const cardsArray = [
-        {
-            id: 1,
-            cardImage: Image.SBIForm,
-            cardTitle: "SBI Form",
-            name: "SBI.pdf",
-            cardButtonText: "Use"
-        },
-        {
-            id: 2,
-            cardImage: Image.ICICIForm,
-            cardTitle: "ICICI Form",
-            name: "ICICI.pdf",
-            cardButtonText: "Use"
-        },
-        {
-            id: 3,
-            cardImage: Image.BankOfBarodaForm,
-            cardTitle: "Bank of Baroda Form",
-            name: "Bank_of_baroda.pdf",
-            cardButtonText: "Use"
-        },
-        {
-            id: 4,
-            cardImage: Image.PNBForm,
-            cardTitle: "Punjab National Bank Form",
-            name: "PNB.pdf",
-            cardButtonText: "Use"
-        },
+        // {
+        //     id: 1,
+        //     cardImage: Image.SBIForm,
+        //     cardTitle: "SBI Form",
+        //     name: "SBI.pdf",
+        //     cardButtonText: "Use"
+        // },
+        // {
+        //     id: 2,
+        //     cardImage: Image.ICICIForm,
+        //     cardTitle: "ICICI Form",
+        //     name: "ICICI.pdf",
+        //     cardButtonText: "Use"
+        // },
+        // {
+        //     id: 3,
+        //     cardImage: Image.BankOfBarodaForm,
+        //     cardTitle: "Bank of Baroda Form",
+        //     name: "Bank_of_baroda.pdf",
+        //     cardButtonText: "Use"
+        // },
+        // {
+        //     id: 4,
+        //     cardImage: Image.PNBForm,
+        //     cardTitle: "Punjab National Bank Form",
+        //     name: "PNB.pdf",
+        //     cardButtonText: "Use"
+        // },
         {
             id: 5,
             cardImage: Image.constructionWorkerForm,
             cardTitle: "Construction Worker Form",
-            name: "Construction_worker_form_1.pdf",
+            name: "Construction_worker_form_2.pdf",
             cardButtonText: "Use"
         },
 
@@ -67,7 +67,7 @@ export const HomeCards = () => {
                     {cardsArray.map((item) => (
                         <Col key={item.id} xs={12} md={6} lg={4} xl={3} className='my-3'>
                             <Card className='w-100 w-sm-50 h-100 '>
-                                <Card.Img variant="top" src={item.cardImage} className='img-fluid' alt={item.cardTitle} />
+                                <Card.Img variant="top" src={item.cardImage} className='img-fluid h-100' alt={item.cardTitle} />
                                 <Card.Body>
                                     <Card.Title className='card-title text-center'>{item.cardTitle}</Card.Title>
                                     <div onClick={() => handleUse(item.name, item.cardTitle)} className={`${loading && 'pe-none opacity-50'}`}>
