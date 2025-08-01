@@ -35,9 +35,13 @@ const CustomInput = ({
 }) => {
     return (
         <>
-            <Form.Label className={`${labelClassName} `}>
-                {inputLabel}
-            </Form.Label>
+            {
+                inputLabel &&
+                <Form.Label className={`${labelClassName} `}>
+                    {inputLabel}
+                </Form.Label>
+            }
+
             <Form.Control
                 autoFocus={autoFocus}
                 className={className}

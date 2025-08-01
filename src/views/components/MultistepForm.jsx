@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Form, Col, Container, Row } from 'react-bootstrap'
 import CommonContext from '../../hooks/CommonContext';
 import CustomButton from '../../reusable-components/CustomButton';
@@ -12,6 +12,9 @@ import { toolbarPlugin } from '@react-pdf-viewer/toolbar';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/toolbar/lib/styles/index.css';
 import { useNavigate } from 'react-router-dom';
+import Select from 'react-dropdown-select'
+import axios from 'axios';
+
 
 
 
@@ -55,9 +58,84 @@ const MultistepForm = () => {
     const [language, setLanguage] = useState("Select Language")
 
 
+    const [searchTerm, setSearchTerm] = useState("");
+    const [searchLoading, setSearchLoading] = useState(false);
+    const [options, setOptions] = useState([]);
+    const [selected, setSelected] = useState(null);
+    const [showDropdown, setShowDropdown] = useState(false);
+    const dropdownRef = useRef();
+
+    // Fetch pincode when input is 6 digits
+    useEffect(() => {
+        if (/^\d{5}$/.test(searchTerm)) {
+            setSearchLoading(true);  // show loader on 5 digits
+            setOptions([]);          // clear old results
+            setShowDropdown(true);   // show dropdown
+        }
+
+        if (/^\d{6}$/.test(searchTerm)) {
+            setTimeout(() => {
+                getPostOffices(searchTerm);
+            }, 10); // delayed search
+        }
+
+        if (searchTerm.length < 5 || searchTerm.length > 6) {
+            setSearchLoading(false);
+            setOptions([]);
+        }
+    }, [searchTerm]);
+
+
+
+
+
+    const getPostOffices = async (pincode) => {
+        try {
+            const response = await axios.get(`https://api.postalpincode.in/pincode/${pincode}`);
+            const postOffices = response.data[0]?.PostOffice || [];
+            const formatted = postOffices.map((item, index) => ({
+                id: index + 1,
+                name: item.Name,
+                pincode: item.Pincode,
+            }));
+            setOptions(formatted);
+            setShowDropdown(true);
+        } catch (err) {
+            console.error("Error fetching:", err);
+            setOptions([]);
+        } finally {
+            setSearchLoading(false); 
+        }
+    };
+
+
+
+
+    const handleSelect = (item) => {
+        setSelected(item);
+        // setSearchTerm("");
+        setOptions([]);
+        setShowDropdown(false);
+    };
+
+    // Close dropdown on click outside
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+                setShowDropdown(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+
+
+
     useEffect(() => {
         (async () => handleFetchPdf())()
     }, [isPdfLoaded])
+
 
     const handleFetchPdf = async () => {
         try {
@@ -258,54 +336,100 @@ const MultistepForm = () => {
                                 <div>
                                     <p htmlFor="field1" className="form-label mb-3 text-grey">There are a few additional questions that need to be answered to complete your application.<br /> Please enter your phone number so we can call you to get that information.</p>
                                     <p htmlFor="field1" className="form-label mb-3 text-grey fst-italic">(Once the call is complete, please regenerate the PDF to include the updated details)</p>
-                                    <div>
-                                        <div className="container-fluid mt-4 mx-auto">
-                                            <div className="row mb-2">
-                                                <div className="mb-4 mt-3 col-sm-12 col-lg-5">
-                                                    <PhoneInput
-                                                        id="floatingInput"
-                                                        specialLabel="Mobile Number"
-                                                        country={dialCode === "" ? "in" : dialCode}
-                                                        dataTestid="mobileNumber"
-                                                        countryCodeEditable={false}
-                                                        enableSearch
-                                                        onChange={(e, phone) =>
-                                                            handlePhoneInput(e, phone, "mobileNumber")
-                                                        }
-                                                        value={`${countryCode}${mobileNumber.mobileNumber}`}
-                                                        inputProps={{
-                                                            alt: "mobileNumber",
-                                                            type: "tel",
-                                                            placeholder: "Mobile Number",
-                                                            required: true,
-                                                            style: { borderColor: "grey", backgroundColor: "white" },
-                                                        }}
-                                                    />
+                                    <div className="container-fluid mt-4 mx-auto ">
+                                        <div className="row mb-4 align-items-center">
+                                            <div className="mt-3 mt-lg-0 col-sm-12 col-lg-4">
+                                                <PhoneInput
+                                                    id="floatingInput"
+                                                    specialLabel="Mobile Number"
+                                                    country={dialCode === "" ? "in" : dialCode}
+                                                    dataTestid="mobileNumber"
+                                                    countryCodeEditable={false}
+                                                    enableSearch
+                                                    onChange={(e, phone) =>
+                                                        handlePhoneInput(e, phone, "mobileNumber")
+                                                    }
+                                                    value={`${countryCode}${mobileNumber.mobileNumber}`}
+                                                    inputProps={{
+                                                        alt: "mobileNumber",
+                                                        type: "tel",
+                                                        placeholder: "Mobile Number",
+                                                        required: true,
+                                                        style: { borderColor: "grey", backgroundColor: "white" },
+                                                    }}
+                                                />
 
-                                                </div>
-                                                <div className='mt-sm-0 mb-4 col-sm-12 col-lg-5 mt-lg-3'>
-                                                    <Form.Select aria-label="select language" value={language} onChange={(e) => setLanguage(e.target.value)} size='lg' className='p-2 py-3 fs-6'>
-                                                        <option className='fs-6'>Select Language</option>
-                                                        <option className='fs-6' value="English">English</option>
-                                                        <option className='fs-6' value="Hindi">Hindi</option>
-                                                    </Form.Select>
-                                                </div>
-
-                                                <div>
-                                                    <CustomButton
-                                                        buttonName={loading && loadingAction === "CallNow" ? <CustomSpinner variant="light" size="sm" /> : "Call now"}
-                                                        className={`btn btn-success d-block cup call-now-button col-sm-12 col-md-3 col-lg-2 
-                                                                    ${loading || !mobileNumber.mobileNumber || language === "Select Language" ? 'pe-none opacity-50' : ''}`
-                                                        }
-                                                        onClick={handleCallNow}
-                                                    />
-                                                    <CustomButton
-                                                        buttonName={loading && loadingAction === "GenerateNewPDF" ? <CustomSpinner variant="light" size="sm" /> : "Generate new PDF"}
-                                                        className={`btn mt-4 cup generate-new-pdf-button  py-2 col-sm-12 col-md-3 col-lg-2  ${loading || !generateNewPdfEnabled && 'pe-none opacity-50'}`}
-                                                        onClick={handleGenerateNewPDF}
-                                                    />
-                                                </div>
                                             </div>
+                                            <div className='mt-4 mt-lg-0 col-sm-12 col-lg-4'>
+                                                <Form.Select aria-label="select language" value={language} onChange={(e) => setLanguage(e.target.value)} size='lg' className='p-2 py-3 fs-6 border-1'>
+                                                    <option className='fs-6'>Select Language</option>
+                                                    {/* <option className='fs-6' value="English">English</option> */}
+                                                    <option className='fs-6' value="Hindi">Hindi</option>
+                                                </Form.Select>
+                                            </div>
+                                            {/* <div className="mt-4 mt-lg-0 col-sm-12 col-lg-4 position-relative" style={{ maxWidth: "400px" }} ref={dropdownRef}>
+                                                <input
+                                                    type="text"
+                                                    className="form-control p-3"
+                                                    placeholder="Enter 6-digit pincode"
+                                                    value={searchTerm}
+                                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                                    onFocus={() => {
+                                                        if (options.length > 0) setShowDropdown(true);
+                                                    }}
+                                                />
+
+                                                {showDropdown && (
+                                                    <div
+                                                        className="border rounded mt-1 position-absolute bg-white w-100 shadow"
+                                                        style={{ zIndex: 1000, maxHeight: "200px", overflowY: "auto" }}
+                                                    >
+                                                        {searchLoading && (
+                                                            <div className="p-2 text-center">
+                                                                <div className="spinner-border spinner-border-sm text-primary" role="status">
+                                                                    <span className="visually-hidden">Loading...</span>
+                                                                </div>
+                                                                <span className="ms-2">Searching...</span>
+                                                            </div>
+                                                        )}
+
+                                                        {!searchLoading && options.length > 0 && options.map((item) => (
+                                                            <div
+                                                                key={item.id}
+                                                                className="p-2 dropdown-item"
+                                                                style={{ cursor: "pointer" }}
+                                                                onClick={() => handleSelect(item)}
+                                                            >
+                                                                {item.name} ({item.pincode})
+                                                            </div>
+                                                        ))}
+
+                                                        {!searchLoading && options.length === 0 && (
+                                                            <div className="p-2 text-danger">No results found</div>
+                                                        )}
+                                                    </div>
+                                                )}
+                                                {selected && (
+                                                    <div className="mt-3">
+                                                        Selected: <strong>{selected.name} ({selected.pincode})</strong>
+                                                    </div>
+                                                )}
+                                            </div> */}
+                                        </div>
+
+                                        <div>
+                                            <CustomButton
+                                                buttonName={loading && loadingAction === "CallNow" ? <CustomSpinner variant="light" size="sm" /> : "Call now"}
+                                                className={`btn btn-success d-block cup call-now-button col-sm-12 col-md-4 col-lg-3 
+                                                                    ${loading || !mobileNumber.mobileNumber || language === "Select Language" ? 'pe-none opacity-50' : ''}`
+                                                }
+                                                onClick={handleCallNow}
+                                            />
+                                            <CustomButton
+                                                buttonName={loading && loadingAction === "GenerateNewPDF" ? <CustomSpinner variant="light" size="sm" /> : "Generate new PDF"}
+                                                className={`btn mt-4 cup generate-new-pdf-button  py-2 col-sm-12 col-md-4 col-lg-3 ${loading || !generateNewPdfEnabled && 'pe-none opacity-50'}`}
+                                                onClick={handleGenerateNewPDF}
+                                            />
                                         </div>
                                     </div>
                                 </div>
