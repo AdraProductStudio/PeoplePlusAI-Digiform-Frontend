@@ -183,7 +183,6 @@ const Signup = () => {
 
     // If any errors exist, stop execution
     if (hasError) {
-      console.error("Validation failed: Fields cannot be empty");
       return;
     }
 

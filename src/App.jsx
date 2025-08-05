@@ -20,6 +20,7 @@ function App() {
 
         <Routes>
           <Route index path='/' element={<Login />} />
+
           <Route path='/register' element={<Signup />} />
 
           <Route element={<ProtectedRoute />}>

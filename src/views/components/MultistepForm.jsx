@@ -14,6 +14,7 @@ import '@react-pdf-viewer/toolbar/lib/styles/index.css';
 import { useNavigate } from 'react-router-dom';
 import Select from 'react-dropdown-select'
 import axios from 'axios';
+import CustomModal from '../../reusable-components/CustomModal';
 
 
 
@@ -40,10 +41,13 @@ const MultistepForm = () => {
 
     const [pdfUrl, setPdfUrl] = useState("");
     const [newPdfUrl, setNewPdfUrl] = useState("");
+    const [generateCallModal, setGenerateCallModal] = useState(false);
+
 
     const [loading, setLoading] = useState(false)
     const [loadingAction, setLoadingAction] = useState(null);
     const [generateNewPdfEnabled, setGenerateNewPdfEnabled] = useState(false)
+    const [formFields, setFormFields] = useState({})
     const [pageLoadingModal, setPageLoadingModal] = useState(false)
     const [step, setStep] = useState(1);
     const [dialCode, setDialCode] = useState("")
@@ -66,50 +70,43 @@ const MultistepForm = () => {
     const dropdownRef = useRef();
 
     // Fetch pincode when input is 6 digits
-    useEffect(() => {
-        if (/^\d{5}$/.test(searchTerm)) {
-            setSearchLoading(true);  // show loader on 5 digits
-            setOptions([]);          // clear old results
-            setShowDropdown(true);   // show dropdown
-        }
+    // useEffect(() => {
+    //     if (/^\d{5}$/.test(searchTerm)) {
+    //         setSearchLoading(true);
+    //         setOptions([]);
+    //         setShowDropdown(true);
+    //     }
 
-        if (/^\d{6}$/.test(searchTerm)) {
-            setTimeout(() => {
-                getPostOffices(searchTerm);
-            }, 10); // delayed search
-        }
+    //     if (/^\d{6}$/.test(searchTerm)) {
+    //         setTimeout(() => {
+    //             getPostOffices(searchTerm);
+    //         }, 10);
+    //     }
 
-        if (searchTerm.length < 5 || searchTerm.length > 6) {
-            setSearchLoading(false);
-            setOptions([]);
-        }
-    }, [searchTerm]);
+    //     if (searchTerm.length < 5 || searchTerm.length > 6) {
+    //         setSearchLoading(false);
+    //         setOptions([]);
+    //     }
+    // }, [searchTerm]);
 
-
-
-
-
-    const getPostOffices = async (pincode) => {
-        try {
-            const response = await axios.get(`https://api.postalpincode.in/pincode/${pincode}`);
-            const postOffices = response.data[0]?.PostOffice || [];
-            const formatted = postOffices.map((item, index) => ({
-                id: index + 1,
-                name: item.Name,
-                pincode: item.Pincode,
-            }));
-            setOptions(formatted);
-            setShowDropdown(true);
-        } catch (err) {
-            console.error("Error fetching:", err);
-            setOptions([]);
-        } finally {
-            setSearchLoading(false); 
-        }
-    };
-
-
-
+    // const getPostOffices = async (pincode) => {
+    //     try {
+    //         const response = await axios.get(`https://api.postalpincode.in/pincode/${pincode}`);
+    //         const postOffices = response.data[0]?.PostOffice || [];
+    //         const formatted = postOffices.map((item, index) => ({
+    //             id: index + 1,
+    //             name: item.Name,
+    //             pincode: item.Pincode,
+    //         }));
+    //         setOptions(formatted);
+    //         setShowDropdown(true);
+    //     } catch (err) {
+    //         console.error("Error fetching:", err);
+    //         setOptions([]);
+    //     } finally {
+    //         setSearchLoading(false);
+    //     }
+    // };
 
     const handleSelect = (item) => {
         setSelected(item);
@@ -128,7 +125,6 @@ const MultistepForm = () => {
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
-
 
 
 
@@ -151,11 +147,10 @@ const MultistepForm = () => {
                 }
             });
 
-            console.log("response.data filled form", response.data)
-
             if (response.data.error_code === 200) {
                 setPageLoadingModal(false);
                 setStep2Enabled(true)
+                setFormFields(response.data.data.form_fields)
                 const base64ToBlobUrl = (pdfBlob1) => {
                     const base64WithoutPrefix = pdfBlob1.split(",")[1];
                     const byteCharacters = atob(base64WithoutPrefix);
@@ -195,40 +190,32 @@ const MultistepForm = () => {
 
     };
 
-    const handleCallNow = async () => {
+    const handleCall = async () => {
+        try {
+            setLoading(true)
+            setLoadingAction("Call")
+            const payload = {
+                "file_blob": fetchedPdfBlobFile,
+                "phone_number": `+${countryCode}${mobileNumber.mobileNumber}`,
+                "language": language,
+            }
+            const response = await axiosInstance.post("/initiate_outbound_call", payload)
 
-        if (mobileNumber.mobileNumber === "") {
-            toast.warn("Please enter your mobile number")
-            return
-        }
-
-        if (window.confirm(`Are you sure you want to call +${mobileNumber.countryCode}${mobileNumber.mobileNumber}?`)) {
-            try {
-                setLoading(true)
-                setLoadingAction("CallNow")
-                const payload = {
-                    "file_blob": fetchedPdfBlobFile,
-                    "phone_number": `+${countryCode}${mobileNumber.mobileNumber}`,
-                    "language": language
-
-                }
-                const response = await axiosInstance.post("/initiate_outbound_call", payload)
-
-                if (response.data.error_code === 200) {
-                    sessionStorage.setItem("conversationId", response.data.data.conversation_id)
-                    sessionStorage.setItem("serviceId", response.data.data.service_id)
-                    setLoading(false)
-                    toast.success(response.data.message)
-                    setGenerateNewPdfEnabled(true)
-                } else {
-                    setLoading(false)
-                    toast.error(response.data.error_code)
-                }
-            } catch (error) {
+            if (response.data.error_code === 200) {
+                sessionStorage.setItem("conversationId", response.data.data.conversation_id)
+                sessionStorage.setItem("serviceId", response.data.data.service_id)
+                setLoading(false)
+                setGenerateCallModal(false)
+                toast.success(response.data.message)
+                setGenerateNewPdfEnabled(true)
+            } else {
                 setLoading(false)
                 toast.error(response.data.error_code)
-                console.log(error)
             }
+        } catch (error) {
+            setLoading(false)
+            toast.error(response.data.error_code)
+            console.log(error)
         }
     }
 
@@ -244,11 +231,12 @@ const MultistepForm = () => {
             const payload = {
                 "file_blob": fetchedPdfBlobFile,
                 "conversation_id": sessionStorage.getItem("conversationId"),
-                "service_id": sessionStorage.getItem("serviceId")
+                "service_id": sessionStorage.getItem("serviceId"),
+                "filename": sessionStorage.getItem("selectedPdf"),
+                "form_fields": formFields
             }
 
             const response = await axiosInstance.post("/get_filled_form", payload)
-            console.log("response.data new filled", response.data)
 
             if (response.data.error_code === 200) {
                 setLoading(false)
@@ -277,6 +265,31 @@ const MultistepForm = () => {
             setLoading(false)
             console.log(error)
         }
+    }
+
+    const modalBodyFun = () => {
+        return (
+            <>
+                <h3 className='my-3 mb-4 text-center ' style={{ color: '#5b719b' }}>Call Request</h3>
+
+                <p className='px-2 text-center' style={{ fontWeight: '450', fontSize: '16px' }}>
+                    {`Would you like to proceed with calling +${mobileNumber.countryCode}${mobileNumber.mobileNumber}?`}
+                </p>
+
+                <div className="mx-2 my-3 mt-4 d-flex gap-3">
+                    <CustomButton
+                        buttonName="Cancel"
+                        className='px-3 mt-2 w-50 btn btn-secondary'
+                        onClick={() => setGenerateCallModal(false)}
+                    />
+                    <CustomButton
+                        buttonName={loading && loadingAction === "Call" ? <CustomSpinner variant="light" size="sm" /> : "Call"}
+                        className='px-3 mt-2 w-50 btn logout-button'
+                        onClick={() => handleCall()}
+                    />
+                </div>
+            </>
+        )
     }
 
     return (
@@ -419,11 +432,11 @@ const MultistepForm = () => {
 
                                         <div>
                                             <CustomButton
-                                                buttonName={loading && loadingAction === "CallNow" ? <CustomSpinner variant="light" size="sm" /> : "Call now"}
+                                                buttonName="Call now"
                                                 className={`btn btn-success d-block cup call-now-button col-sm-12 col-md-4 col-lg-3 
-                                                                    ${loading || !mobileNumber.mobileNumber || language === "Select Language" ? 'pe-none opacity-50' : ''}`
+                                                                    ${!mobileNumber.mobileNumber || language === "Select Language" ? 'pe-none opacity-50' : ''}`
                                                 }
-                                                onClick={handleCallNow}
+                                                onClick={() => setGenerateCallModal(true)}
                                             />
                                             <CustomButton
                                                 buttonName={loading && loadingAction === "GenerateNewPDF" ? <CustomSpinner variant="light" size="sm" /> : "Generate new PDF"}
@@ -479,6 +492,17 @@ const MultistepForm = () => {
                     </div>
                 </div>
             )}
+
+            <CustomModal
+                show={generateCallModal}
+                modalBody={modalBodyFun()}
+                onHide={() => setGenerateCallModal(false)}
+                size="md"
+                aria-labelledby="contained-modal-title-vcenter"
+                centered
+                backdrop="static"
+            />
+
         </Container >
     )
 }
