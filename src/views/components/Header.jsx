@@ -143,7 +143,7 @@ const Header = ({ currentPage }) => {
                         currentPage === "Home" ?
                             <div className='d-flex justify-content-end gap-2'>
                                 <Navbar.Collapse className="">
-                                    <div className='cup gap-2' onClick={() => setModalShow(true)}>
+                                    <div title='Info' className='cup gap-2' onClick={() => setModalShow(true)}>
                                         <BsInfoSquareFill size={34} style={{ color: '#809bce' }} />
                                     </div>
                                 </Navbar.Collapse>
@@ -160,6 +160,7 @@ const Header = ({ currentPage }) => {
                                 <div className='d-flex justify-content-end gap-2'>
                                     <Navbar.Collapse className="">
                                         <CustomButton
+                                            title="Back to home"
                                             buttonName={
                                                 isMobileScreen ?
                                                     <AiFillHome />

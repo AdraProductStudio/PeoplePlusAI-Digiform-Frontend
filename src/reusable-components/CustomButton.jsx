@@ -3,12 +3,13 @@ import React from 'react'
 const CustomButton = ({
     className,
     buttonName,
-    onClick
+    onClick,
+    title,
 }) => {
 
 
     return (
-        <button className={className} onClick={onClick}>
+        <button title={title} className={className} onClick={onClick}>
             {buttonName}
         </button>
     )
