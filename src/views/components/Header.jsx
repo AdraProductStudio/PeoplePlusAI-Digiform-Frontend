@@ -175,7 +175,7 @@ const Header = ({ currentPage }) => {
                                         <CustomButton
                                             buttonName="Log out"
                                             className='px-3 btn logout-button'
-                                            onClick={handleLogout}
+                                            onClick={() => setLogoutModalShow(true)}
                                         />
                                     </Navbar.Collapse>
                                 </div>

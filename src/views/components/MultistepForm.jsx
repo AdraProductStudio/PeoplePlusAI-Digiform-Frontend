@@ -233,7 +233,8 @@ const MultistepForm = () => {
                 "conversation_id": sessionStorage.getItem("conversationId"),
                 "service_id": sessionStorage.getItem("serviceId"),
                 "filename": sessionStorage.getItem("selectedPdf"),
-                "form_fields": formFields
+                "form_fields": formFields,
+                "digilocker": true
             }
 
             const response = await axiosInstance.post("/get_filled_form", payload)
@@ -252,6 +253,7 @@ const MultistepForm = () => {
 
                 const newPdfBlobUrl = base64ToBlobUrl(response.data.data.file_blob);
                 setFetchedPdfBlobFile(response.data.data.file_blob.split(",")[1])
+                setFormFields(response.data.data.form_fields)
                 setNewPdfUrl(newPdfBlobUrl);
                 toast.success(response.data.message)
             } else if (response.data.error_code === 1) {
@@ -307,80 +309,92 @@ const MultistepForm = () => {
                     </div>
                     {
                         step === 1 &&
-                        <Col className="overflow-scroll w-100 col d-flex justify-content-center ">
-                            {newPdfUrl ?
-                                isMobileScreen ?
-                                    <div style={{ height: '600px', width: '100%' }}>
-                                        <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
-                                            <Toolbar />
-                                            <Viewer fileUrl={newPdfUrl} plugins={[toolbarPluginInstance]} />
-                                        </Worker>
-                                    </div>
-                                    :
-                                    <iframe
-                                        src={newPdfUrl}
-                                        title="Filled PDF"
-                                        style={{ width: "60%", height: "100%", border: "none" }}
-                                    />
-                                :
-                                pdfUrl ?
+                        <>
+                            {!pageLoadingModal && <h3 className='mt-4 mb-5 text-center step-heading' >
+                                <FaWpforms className='me-3' style={{ marginBottom: '5px' }} size={20} />
+                                Form to be filled
+                            </h3>}
+                            <Col className="overflow-scroll w-100 col d-flex justify-content-center ">
+                                {newPdfUrl ?
                                     isMobileScreen ?
-                                        <div style={{ height: '100%', width: '100%' }}>
+                                        <div style={{ height: '600px', width: '100%' }}>
                                             <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
                                                 <Toolbar />
-                                                <Viewer fileUrl={pdfUrl} plugins={[toolbarPluginInstance]} />
+                                                <Viewer fileUrl={newPdfUrl} plugins={[toolbarPluginInstance]} />
                                             </Worker>
                                         </div>
                                         :
                                         <iframe
-                                            src={pdfUrl}
+                                            src={newPdfUrl}
                                             title="Filled PDF"
-                                            style={{ width: "60%", height: "100vh", border: "none" }}
+                                            style={{ width: "60%", height: "100%", border: "none" }}
                                         />
                                     :
-                                    null
-                            }
-                        </Col>
+                                    pdfUrl ?
+                                        isMobileScreen ?
+                                            <div style={{ height: '100%', width: '100%' }}>
+                                                <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
+                                                    <Toolbar />
+                                                    <Viewer fileUrl={pdfUrl} plugins={[toolbarPluginInstance]} />
+                                                </Worker>
+                                            </div>
+                                            :
+                                            <iframe
+                                                src={pdfUrl}
+                                                title="Filled PDF"
+                                                style={{ width: "60%", height: "100vh", border: "none" }}
+                                            />
+                                        :
+                                        null
+                                }
+                            </Col>
+                        </>
+
                     }
                     {
                         step === 2 &&
-                        <Col className="overflow-scroll w-100 col  ">
-                            <div className='px-lg-5 px-3 my-5 mx-auto d-block '>
-                                <div>
-                                    <p htmlFor="field1" className="form-label mb-3 text-grey">There are a few additional questions that need to be answered to complete your application.<br /> Please enter your phone number so we can call you to get that information.</p>
-                                    <p htmlFor="field1" className="form-label mb-3 text-grey fst-italic">(Once the call is complete, please regenerate the PDF to include the updated details)</p>
-                                    <div className="container-fluid mt-4 mx-auto ">
-                                        <div className="row mb-4 align-items-center">
-                                            <div className="mt-3 mt-lg-0 col-sm-12 col-lg-4">
-                                                <PhoneInput
-                                                    id="floatingInput"
-                                                    specialLabel="Mobile Number"
-                                                    country={dialCode === "" ? "in" : dialCode}
-                                                    dataTestid="mobileNumber"
-                                                    countryCodeEditable={false}
-                                                    enableSearch
-                                                    onChange={(e, phone) =>
-                                                        handlePhoneInput(e, phone, "mobileNumber")
-                                                    }
-                                                    value={`${countryCode}${mobileNumber.mobileNumber}`}
-                                                    inputProps={{
-                                                        alt: "mobileNumber",
-                                                        type: "tel",
-                                                        placeholder: "Mobile Number",
-                                                        required: true,
-                                                        style: { borderColor: "grey", backgroundColor: "white" },
-                                                    }}
-                                                />
+                        <>
+                            <h3 className='mt-4 mb-5 text-center step-heading' >
+                                <RiCustomerService2Fill className='me-3' style={{ marginBottom: '5px' }} size={20} />
+                                AI Voice call
+                            </h3>
+                            <Col className="overflow-scroll w-100 col  ">
+                                <div className='px-lg-5 px-3 mb-5 mx-auto d-block '>
+                                    <div>
+                                        <p htmlFor="field1" className="form-label mb-3 text-grey">There are a few additional questions that need to be answered to complete your application.<br /> Please enter your phone number so we can call you to get that information.</p>
+                                        <p htmlFor="field1" className="form-label mb-3 text-grey fst-italic">(Once the call is complete, please regenerate the PDF to include the updated details)</p>
+                                        <div className="container-fluid mt-4 mx-auto ">
+                                            <div className="row mb-4 align-items-center mt-5">
+                                                <div className="mt-3 mt-lg-0 col-sm-12 col-lg-4">
+                                                    <PhoneInput
+                                                        id="floatingInput"
+                                                        specialLabel="Mobile Number"
+                                                        country={dialCode === "" ? "in" : dialCode}
+                                                        dataTestid="mobileNumber"
+                                                        countryCodeEditable={false}
+                                                        enableSearch
+                                                        onChange={(e, phone) =>
+                                                            handlePhoneInput(e, phone, "mobileNumber")
+                                                        }
+                                                        value={`${countryCode}${mobileNumber.mobileNumber}`}
+                                                        inputProps={{
+                                                            alt: "mobileNumber",
+                                                            type: "tel",
+                                                            placeholder: "Mobile Number",
+                                                            required: true,
+                                                            style: { borderColor: "grey", backgroundColor: "white" },
+                                                        }}
+                                                    />
 
-                                            </div>
-                                            <div className='mt-4 mt-lg-0 col-sm-12 col-lg-4'>
-                                                <Form.Select aria-label="select language" value={language} onChange={(e) => setLanguage(e.target.value)} size='lg' className='p-2 py-3 fs-6 border-1'>
-                                                    <option className='fs-6'>Select Language</option>
-                                                    {/* <option className='fs-6' value="English">English</option> */}
-                                                    <option className='fs-6' value="Hindi">Hindi</option>
-                                                </Form.Select>
-                                            </div>
-                                            {/* <div className="mt-4 mt-lg-0 col-sm-12 col-lg-4 position-relative" style={{ maxWidth: "400px" }} ref={dropdownRef}>
+                                                </div>
+                                                <div className='mt-4 mt-lg-0 col-sm-12 col-lg-4'>
+                                                    <Form.Select aria-label="select language" value={language} onChange={(e) => setLanguage(e.target.value)} size='lg' className='p-2 py-3 fs-6 border-1'>
+                                                        <option className='fs-6'>Select Language</option>
+                                                        {/* <option className='fs-6' value="English">English</option> */}
+                                                        <option className='fs-6' value="Hindi">Hindi</option>
+                                                    </Form.Select>
+                                                </div>
+                                                {/* <div className="mt-4 mt-lg-0 col-sm-12 col-lg-4 position-relative" style={{ maxWidth: "400px" }} ref={dropdownRef}>
                                                 <input
                                                     type="text"
                                                     className="form-control p-3"
@@ -428,35 +442,40 @@ const MultistepForm = () => {
                                                     </div>
                                                 )}
                                             </div> */}
-                                        </div>
+                                            </div>
 
-                                        <div>
-                                            <CustomButton
-                                                buttonName="Call now"
-                                                className={`btn btn-success d-block cup call-now-button col-sm-12 col-md-4 col-lg-3 
+                                            <div>
+                                                <CustomButton
+                                                    buttonName="Call now"
+                                                    className={`btn btn-success d-block cup call-now-button col-sm-12 col-md-4 col-lg-3 
                                                                     ${!mobileNumber.mobileNumber || language === "Select Language" ? 'pe-none opacity-50' : ''}`
-                                                }
-                                                onClick={() => setGenerateCallModal(true)}
-                                            />
-                                            <CustomButton
-                                                buttonName={loading && loadingAction === "GenerateNewPDF" ? <CustomSpinner variant="light" size="sm" /> : "Generate new PDF"}
-                                                className={`btn mt-4 cup generate-new-pdf-button  py-2 col-sm-12 col-md-4 col-lg-3 ${loading || !generateNewPdfEnabled && 'pe-none opacity-50'}`}
-                                                onClick={handleGenerateNewPDF}
-                                            />
+                                                    }
+                                                    onClick={() => setGenerateCallModal(true)}
+                                                />
+                                                <CustomButton
+                                                    buttonName={loading && loadingAction === "GenerateNewPDF" ? <CustomSpinner variant="light" size="sm" /> : "Generate new PDF"}
+                                                    className={`btn mt-4 cup generate-new-pdf-button  py-2 col-sm-12 col-md-4 col-lg-3 ${loading || !generateNewPdfEnabled && 'pe-none opacity-50'}`}
+                                                    onClick={handleGenerateNewPDF}
+                                                />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </Col>
+                            </Col>
+                        </>
+
                     }
                     {
                         step === 3 &&
-                        <div className={`step step-3 px-5`}>
-                            <p htmlFor="field1" className="form-label text-grey mt-5">Thank you for using Digiform!</p>
-                            <div className='mt-4'>
-                                <button type="button" className="btn btn-success " onClick={() => handleFinish()}>Finish</button>
+                        <>
+                            <div className={`step step-3 px-5`}>
+                                <p htmlFor="field1" className="form-label text-grey mt-5">Thank you for using Digiform!</p>
+                                <div className='mt-4'>
+                                    <button type="button" className="btn btn-success " onClick={() => handleFinish()}>Finish</button>
+                                </div>
                             </div>
-                        </div>
+                        </>
+
                     }
                 </Row>
             </Container>
