@@ -227,7 +227,7 @@ const Signup = () => {
                   onChange={handleSignupInputs}
                   value={signupInputs?.username || ""}
                   className="mb-2"
-                  onBlur={() => handleBlur("username")}
+                  // onBlur={() => handleBlur("username")}
                 />
                 {
                   error.usernameError &&
@@ -246,7 +246,7 @@ const Signup = () => {
                   onChange={handleSignupInputs}
                   value={signupInputs?.password || ""}
                   className="mb-2"
-                  onBlur={() => handleBlur("password")}
+                  // onBlur={() => handleBlur("password")}
                 />
                 {
                   error.passwordError &&
@@ -265,7 +265,7 @@ const Signup = () => {
                   onChange={handleSignupInputs}
                   value={signupInputs?.confirmPassword || ""}
                   className="mb-2"
-                  onBlur={() => handleBlur("confirmPassword")}
+                  // onBlur={() => handleBlur("confirmPassword")}
                   onKeyDown={handleKeyDown}
                 />
                 {
